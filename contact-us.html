@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <!-- Required Meta Tags -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=yes">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <!-- Page Title -->
+  <title>Contact Us</title>
+
+  <link rel="shortcut icon" href="assets/images/logo/icon.png" type="image/x-icon">
+
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="assets/css/animate-3.7.0.css">
+  <link rel="stylesheet" href="assets/css/font-awesome-4.7.0.min.css">
+  <link rel="stylesheet" href="assets/fonts/flat-icon/flaticon.css">
+  <link rel="stylesheet" href="assets/css/bootstrap-4.1.3.min.css">
+  <link rel="stylesheet" href="assets/css/owl-carousel.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  
+  <!-- Dark Mode CSS -->
+  <style>
+    :root {
+      /* Light mode colors (default) */
+      --background-color: #ffffff;
+      --text-color: #333333;
+      --heading-color: #222222;
+      --border-color: #dddddd;
+      --card-background: #f9f9f9;
+      --footer-background: #021a3a;
+      --footer-text: #fff;
+      --input-background: #f9f9f9;
+      --contact-box-shadow: rgba(0, 0, 0, 0.1);
+    }
+
+    [data-theme="dark"] {
+      /* Dark mode colors */
+      --background-color: #121212;
+      --text-color: #e0e0e0;
+      --heading-color: #ffffff;
+      --border-color: #444444;
+      --card-background: #1e1e1e;
+      --footer-background: #0c0c0c;
+      --footer-text: #e0e0e0;
+      --input-background: #2d2d2d;
+      --contact-box-shadow: rgba(255, 255, 255, 0.05);
+    }
+
+    body {
+      background-color: var(--background-color);
+      color: var(--text-color);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      color: var(--heading-color);
+    }
+
+    /* Form elements in dark mode */
+    [data-theme="dark"] input,
+    [data-theme="dark"] textarea {
+      background-color: var(--input-background);
+      color: var(--text-color);
+      border-color: var(--border-color);
+    }
+
+    /* Footer in dark mode */
+    [data-theme="dark"] .footer-area {
+      background-color: var(--footer-background);
+      color: var(--footer-text);
+    }
+
+    /* Toggle Button */
+    .dark-mode-toggle {
+      position: fixed;
+      right: 20px;
+      top: 100px;
+      z-index: 1000;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--card-background);
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 2px 10px var(--contact-box-shadow);
+      transition: all 0.3s ease;
+    }
+
+    .dark-mode-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    .dark-mode-icon, .light-mode-icon {
+      transition: opacity 0.3s ease;
+    }
+
+    .dark-mode-icon {
+      display: none;
+    }
+
+    [data-theme="dark"] .dark-mode-icon {
+      display: block;
+    }
+
+    [data-theme="dark"] .light-mode-icon {
+      display: none;
+    }
+
+    /* Contact form in dark mode */
+    [data-theme="dark"] .contact-form input,
+    [data-theme="dark"] .contact-form textarea {
+      background-color: var(--input-background);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+    }
+
+    /* Info boxes in dark mode */
+    [data-theme="dark"] .info-text {
+      color: var(--text-color);
+    }
+
+    [data-theme="dark"] .into-icon {
+      background-color: var(--card-background);
+      color: var(--heading-color);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Preloader Starts -->
+  <div class="preloader">
+    <div class="spinner"></div>
+  </div>
+  <!-- Preloader End -->
+
+  <!-- Dark Mode Toggle Button -->
+  <button id="darkModeToggle" class="dark-mode-toggle">
+    <span class="light-mode-icon">🌙</span>
+    <span class="dark-mode-icon">☀️</span>
+  </button>
+
+  <!-- Header Area Starts -->
+  <header class="header-area single-page">
+    <div class="header-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-2">
+            <div class="logo-area">
+              <a href="index.html"><img src="assets/images/int.png" alt="logo" style="width:230px!important;height:70px;margin-top:0px"></a>
+            </div>
+          </div>
+          <div class="col-lg-10">
+            <div class="custom-navbar">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div class="main-menu main-menu-light">
+              <ul>
+                <li class="active"><a href="index.html">home</a></li>
+                <li><a href="about.html">about us</a></li>
+                <li><a href="internship-search.html">Internship search</a></li>
+                <li><a href="contact-us.html">contact</a></li>
+                <li><a href="resume-search.html">Resume Search</a>
+                <li><a href="#">Login</a>
+                  <ul class="sub-menu">
+                    <li><a href="userlogin.html">Internship Seeker Login</a></li>
+                    <li><a href="recruiter_login.html">Employer login</a></li>
+                  </ul>
+                </li>
+                <li class="menu-btn">
+                <li><a href="#" class="template-btn">sign up</a>
+                  <ul class="sub-menu">
+                    <li><a href="user_signup.html">Internship Seeker Signup</a></li>
+                    <li><a href="recruiter_signup.html">Employer Signup</a></li>
+                  </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="page-title text-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 offset-md-3">
+            <h2>Contact Us</h2>
+            <p>Feel free to contact us.<br />Always Ready to Help you.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- Header Area End -->
+
+  <!-- Map Area Starts -->
+  <section class="map-area section-padding">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3320.2599318454236!2d35.46506077516045!3d33.676333037486906!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151ee231c72ee183%3A0xf5ff459b114245d0!2sBeirut%20Arab%20University%2C%20Campus%20Debbieh!5e0!3m2!1sen!2slb!4v1744982446262!5m2!1sen!2slb" 
+          width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Map Area End -->
+
+  <!-- Contact Form Starts -->
+  <section class="contact-form section-padding3">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 mb-5 mb-lg-0">
+          <div class="d-flex mb-3">
+            <div class="into-icon">
+              <i class="fa fa-map-marker"></i>
+            </div>
+            <div class="info-text">
+              <h4>Beirut Arab University</h4>
+              <p>Debbieh Campus</p>
+            </div>
+          </div>
+        
+          <div class="d-flex mb-3">
+            <div class="into-icon">
+              <i class="fa fa-phone"></i>
+            </div>
+            <div class="info-text">
+              <h4>+961 1 300110</h4>
+              <p>Ext: 555</p>
+            </div>
+          </div>
+        
+          <div class="d-flex mb-3">
+            <div class="into-icon">
+              <i class="fa fa-envelope-o"></i>
+            </div>
+            <div class="info-text">
+              <h4>internship@bau.edu.lb</h4>
+              <p>Email us anytime!</p>
+            </div>
+          </div>
+        
+          <div class="d-flex mb-3">
+            <div class="into-icon">
+              <i class="fa fa-clock-o"></i>
+            </div>
+            <div class="info-text">
+              <h4>Opening Hours</h4>
+              <p><strong>Mon – Fri</strong></p>
+              <p><strong>Fall & Spring:</strong> 8:00 AM – 4:00 PM</p>
+              <p><strong>Summer:</strong> 9:00 AM – 3:00 PM</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-9">
+          <form action="#">
+            <div class="left">
+              <input type="text" placeholder="Enter your name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter your name'" required>
+              <input type="email" placeholder="Enter email address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter email address'" required>
+              <input type="tel" placeholder="Enter your phone number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter your phone number'" required>
+              <input type="text" placeholder="Enter subject" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter subject'" required>
+              <input type="text" placeholder="City" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter city'" required>
+            </div>
+            <div class="right">
+              <textarea name="message" cols="20" rows="7" placeholder="Enter Message" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Message'" required></textarea>
+            </div>
+            <button type="submit" class="template-btn">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Contact Form End -->
+
+  <!-- Footer Area Starts -->
+  <footer class="footer-area section-padding">
+    <div class="footer-widget">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-2 col-lg-3">
+            <div class="single-widget-home mb-5 mb-lg-0">
+              <h3 class="mb-4">Quick Links</h3>
+              <ul>
+                <li class="mb-2"><a href="#">About Us</a></li>
+                <li class="mb-2"><a href="#">Contact Us</a></li>
+                <li class="mb-2"><a href="#">Resume Search</a></li>
+                <li><a href="#">internship Openings</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xl-5 offset-xl-1 col-lg-6">
+            <div class="single-widget-home mb-5 mb-lg-0">
+              <h3 class="mb-4">newsletter</h3>
+              <p class="mb-4">Get internship opportunities and valuable career insights delivered directly to you.</p>
+              <form action="#">
+                <input type="email" placeholder="Your email here" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Your email here'" required>
+                <button type="submit" class="template-btn">subscribe now</button>
+              </form>
+            </div>
+          </div>
+          <div class="col-xl-3 offset-xl-1 col-lg-3">
+            <div class="single-widget-home mb-5 mb-lg-0">
+              <h3 class="mb-4">Popular cities</h3>
+              <ul>
+                <li class="mb-2"><a href="#">Beirut </a></li>
+                <li class="mb-2"><a href="#">Zahle </a></li>
+                <li class="mb-2"><a href="#">Jounieh </a></li>
+                <li class="mb-2"><a href="#">Tyre</a></li>
+                <li class="mb-2"><a href="#">Saida </a></li>
+                <li class="mb-2"><a href="#">Tripoli </a></li>
+                <li class="mb-2"><a href="#">Baabda </a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-6">
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="social-icons">
+              <ul>
+                <li><a href="https://www.facebook.com/BeirutArabUniversity/" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                <li><a href="https://www.linkedin.com/school/beirut-arab-university/" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                <li><a href="https://twitter.com/bau_official" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                <li><a href="https://www.youtube.com/@BeirutArabUniversity" target="_blank"><i class="fa fa-youtube"></i></a></li>
+                <li><a href="https://www.bau.edu.lb/" target="_blank"><i class="fa fa-home"></i></a></li>
+                <li><a href="#"><i class="fa fa-arrow-up"></i></a></li> <!-- Scroll to top -->
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- Footer Area End -->
+
+  <!-- Javascript -->
+  <script src="assets/js/vendor/jquery-2.2.4.min.js"></script>
+  <script src="assets/js/vendor/bootstrap-4.1.3.min.js"></script>
+  <script src="assets/js/vendor/wow.min.js"></script>
+  <script src="assets/js/vendor/owl-carousel.min.js"></script>
+  <script src="assets/js/vendor/jquery.nice-select.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpfS1oRGreGSBU5HHjMmQ3o5NLw7VdJ6I"></script>
+  <script src="assets/js/vendor/gmaps.min.js"></script>
+  <script src="assets/js/vendor/ion.rangeSlider.js"></script>
+  <script src="assets/js/main.js"></script>
+  
+  <!-- Dark Mode JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const darkModeToggle = document.getElementById('darkModeToggle');
+      
+      // Check for saved theme preference
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      } else {
+        // Check if user prefers dark mode at system level
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        if (prefersDarkScheme.matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      }
+      
+      // Toggle dark mode on button click
+      darkModeToggle.addEventListener('click', function() {
+        let currentTheme = document.documentElement.getAttribute('data-theme');
+        let newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+      });
+    });
+  </script>
+</body>
+
+</html>
