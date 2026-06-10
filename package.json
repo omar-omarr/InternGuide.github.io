@@ -1,0 +1,11 @@
+{
+  "name": "internguide",
+  "private": true,
+  "engines": {
+    "node": ">=20 <25"
+  },
+  "scripts": {
+    "start": "npm --prefix backend start",
+    "db:init": "npm --prefix backend run db:init"
+  }
+}
