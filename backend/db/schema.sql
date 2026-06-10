@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS applications (
   cover_letter TEXT,
   resume_path TEXT NOT NULL,
   status VARCHAR(20) NOT NULL DEFAULT 'submitted'
-    CHECK (status IN ('submitted', 'reviewed', 'shortlisted', 'rejected', 'accepted')),
+    CHECK (status IN ('submitted', 'viewed', 'shortlisted', 'interview_scheduled', 'accepted', 'rejected', 'withdrawn')),
   applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   UNIQUE (internship_id, student_id)
@@ -95,6 +95,11 @@ CREATE TABLE IF NOT EXISTS student_university_profiles (
   university_id BIGINT NOT NULL REFERENCES universities(id) ON DELETE CASCADE,
   department_id BIGINT REFERENCES departments(id) ON DELETE SET NULL,
   student_number VARCHAR(80),
+  faculty VARCHAR(160),
+  major VARCHAR(160),
+  academic_year VARCHAR(80),
+  skills TEXT,
+  gpa NUMERIC(3, 2) CHECK (gpa IS NULL OR (gpa >= 0 AND gpa <= 4)),
   verification_status VARCHAR(20) NOT NULL DEFAULT 'pending'
     CHECK (verification_status IN ('pending', 'verified', 'rejected')),
   verified_by BIGINT REFERENCES admin_users(id) ON DELETE SET NULL,

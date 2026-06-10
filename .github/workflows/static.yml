@@ -45,6 +45,7 @@ jobs:
             --exclude 'railway.json' \
             --exclude 'package.json' \
             --exclude 'README.md' \
+            --exclude 'PORTAL_UPGRADE.md' \
             --exclude '.gitignore'
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

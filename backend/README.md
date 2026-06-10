@@ -33,6 +33,7 @@ Run migrations when needed:
 ```bash
 psql -d internguide -f db/migrations/20260603_add_common_indexes.sql
 psql -d internguide -f db/migrations/20260603_add_admin_university_foundation.sql
+npm run migrate:portal-upgrade
 ```
 
 If `psql` is not on PATH, run the admin/university foundation migration through Node:
@@ -80,6 +81,7 @@ Initialize a new production database with:
 
 ```bash
 npm run db:init
+npm run migrate:portal-upgrade
 ```
 
 The public health check is:
@@ -96,7 +98,7 @@ The repository-root `render.yaml` defines:
 
 - A Node web service rooted at `backend/`
 - A managed PostgreSQL database
-- `npm ci`, `npm run db:init`, and `npm start`
+- `npm ci`, `npm run db:init`, `npm run migrate:portal-upgrade`, and `npm start`
 - `/api/health` as the health check
 - The GitHub Pages origin for CORS
 - A persistent disk mounted at `/var/data` for resumes
@@ -152,6 +154,10 @@ Railway volumes persist across deploys. Keep the volume attached while the curre
 - `GET /api/recruiter/internships` - recruiter-only list of own internships.
 - `GET /api/recruiter/internships/:id/applications` - recruiter-only applicant list for an owned internship.
 - `PATCH /api/applications/:id/status` - recruiter-only application status update.
+- `PATCH /api/applications/:id/withdraw` - student-only application withdrawal.
+- `GET /api/notifications` - role-scoped notifications for the authenticated user.
+- `PATCH /api/notifications/:id/read` - mark one owned notification as read.
+- `PATCH /api/notifications/read-all` - mark all owned notifications as read.
 - `GET /api/applications/:id/resume` - protected resume download for the owning recruiter, owning student, or system admin.
 - `POST /api/admin-auth/login` - admin login for `system_admin` and `university_admin`.
 - `GET /api/admin-auth/me` - current active admin profile.
@@ -300,8 +306,26 @@ Manual checklist:
 - Role guards protect student/recruiter behavior.
 - Recruiter routes only allow access to internships owned by that recruiter.
 - Duplicate applications are blocked with a database unique constraint.
-- Resume uploads are limited to PDF, DOC, and DOCX files up to 5MB.
+- Resume uploads are limited to PDF files up to 5MB.
 - Resume filenames are randomized, paths are constrained to the configured upload directory, and failed requests remove uploaded files.
 - Uploaded resumes are not served statically; downloads go through an authorization check.
 - Production resume storage must use `UPLOAD_DIR` on a persistent disk or volume.
 - Helmet, CORS, and rate limiting are enabled.
+
+## University Portal Upgrade
+
+Run this once on every existing database before starting the upgraded API:
+
+```bash
+npm run migrate:portal-upgrade
+```
+
+The migration safely adds the expanded student university profile fields, upgrades application statuses, and creates pending verification records for legacy recruiters without deleting existing demo data.
+
+Recruiters now enter `pending` verification after signup and cannot create internships until a system admin approves them. New and edited internships enter university approval before appearing publicly. Application tracking supports `submitted`, `viewed`, `shortlisted`, `interview_scheduled`, `accepted`, `rejected`, and `withdrawn`.
+
+Run the local end-to-end PostgreSQL workflow smoke test with:
+
+```bash
+npm run test:workflow
+```

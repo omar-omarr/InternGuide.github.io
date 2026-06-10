@@ -24,7 +24,7 @@
           '  <td>' + api.escapeHtml(item.title) + '</td>',
           '  <td>' + api.escapeHtml(item.company_name) + '</td>',
           '  <td>' + api.escapeHtml(item.department_name || '') + '</td>',
-          '  <td>' + api.escapeHtml(item.status) + '</td>',
+          '  <td><span class="admin-status admin-status-' + api.escapeHtml(item.status) + '">' + api.escapeHtml(item.status) + '</span></td>',
           '  <td>' + api.escapeHtml(api.formatDate(item.created_at)) + '</td>',
           '  <td><button class="admin-button admin-button-small" type="button" data-view-id="' + item.approval_id + '">View</button></td>',
           '</tr>',

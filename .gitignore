@@ -27,6 +27,15 @@ logs/*
 test-artifacts/*
 !test-artifacts/.gitkeep
 
+# Local-only files that must never be committed
+/Final Report Bau internships platform.docx
+/link.txt
+/logs/
+/test-artifacts/
+/uploads/
+/backend/uploads/
+*.log
+
 # Editor and OS noise
 .vs/
 .vscode/

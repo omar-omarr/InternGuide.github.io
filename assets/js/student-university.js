@@ -116,11 +116,15 @@
       form.elements.university_id.value = currentProfile.university_id || '';
       form.elements.department_id.value = currentProfile.department_id || '';
       form.elements.student_number.value = currentProfile.student_number || '';
+      form.elements.faculty.value = currentProfile.faculty || '';
+      form.elements.major.value = currentProfile.major || '';
+      form.elements.academic_year.value = currentProfile.academic_year || '';
+      form.elements.skills.value = currentProfile.skills || '';
+      form.elements.gpa.value = currentProfile.gpa || '';
     }
 
     if (currentProfile && currentProfile.verification_status === 'verified') {
-      setFormDisabled(true);
-      setMessage('Your university profile is verified and cannot be edited.', 'success');
+      setMessage('Your university profile is verified. Editing it will submit it for verification again.', 'success');
     }
   }
 

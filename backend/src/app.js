@@ -19,6 +19,7 @@ const systemAdminRoutes = require('./routes/system-admin.routes');
 const universityRoutes = require('./routes/university.routes');
 const studentRoutes = require('./routes/student.routes');
 const publicUniversityRoutes = require('./routes/public-university.routes');
+const notificationRoutes = require('./routes/notification.routes');
 
 const app = express();
 
@@ -60,6 +61,7 @@ app.use('/api/system-admin', systemAdminRoutes);
 app.use('/api/university', universityRoutes);
 app.use('/api/student', studentRoutes);
 app.use('/api/universities', publicUniversityRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

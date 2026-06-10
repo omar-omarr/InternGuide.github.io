@@ -5,7 +5,7 @@
     "buildCommand": "cd backend && npm ci"
   },
   "deploy": {
-    "preDeployCommand": "cd backend && npm run db:init",
+    "preDeployCommand": "cd backend && npm run db:init && npm run migrate:portal-upgrade",
     "startCommand": "cd backend && npm start",
     "healthcheckPath": "/api/health",
     "healthcheckTimeout": 120,

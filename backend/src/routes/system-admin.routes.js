@@ -13,6 +13,15 @@ const reviewStatuses = ['approved', 'rejected'];
 const verificationStatuses = ['pending', 'approved', 'rejected'];
 const studentVerificationStatuses = ['pending', 'verified', 'rejected'];
 const approvalStatuses = ['pending', 'approved', 'rejected'];
+const applicationStatuses = [
+  'submitted',
+  'viewed',
+  'shortlisted',
+  'interview_scheduled',
+  'accepted',
+  'rejected',
+  'withdrawn',
+];
 
 router.use(authenticateToken, requireSystemAdmin);
 
@@ -765,14 +774,69 @@ router.get(
   }),
 );
 
+router.patch(
+  '/internship-approvals/:id/review',
+  idValidator(),
+  body('status').isIn(reviewStatuses).withMessage('Status must be approved or rejected.'),
+  body('notes')
+    .if(body('status').equals('rejected'))
+    .trim()
+    .notEmpty()
+    .withMessage('Notes are required when rejecting an internship approval.'),
+  body('notes').optional({ checkFalsy: true }).trim().isLength({ max: 2000 }),
+  validateRequest,
+  asyncHandler(async (req, res) => {
+    const result = await pool.query(
+      `WITH updated AS (
+         UPDATE internship_university_approvals
+         SET status = $1,
+             reviewed_by = $2,
+             reviewed_at = NOW(),
+             notes = $3,
+             updated_at = NOW()
+         WHERE id = $4
+         RETURNING *
+       )
+       SELECT updated.*, i.title, i.recruiter_id
+       FROM updated
+       JOIN internships i ON i.id = updated.internship_id`,
+      [req.body.status, req.auth.id, req.body.notes || null, req.params.id],
+    );
+    const approval = result.rows[0];
+
+    if (!approval) {
+      return res.status(404).json({ message: 'Internship approval not found.' });
+    }
+
+    await createNotification({
+      recipientRole: 'recruiter',
+      recipientId: approval.recruiter_id,
+      title: `Internship approval ${approval.status}`,
+      message:
+        approval.status === 'approved'
+          ? `Your internship "${approval.title}" was approved.`
+          : `Your internship "${approval.title}" was rejected: ${approval.notes}`,
+      type: 'internship_university_approval',
+    });
+    await writeAudit(req, 'internship_approval_reviewed', 'internship_university_approvals', approval.id, {
+      status: approval.status,
+      internshipId: approval.internship_id,
+    });
+
+    return res.json({ message: 'Internship approval reviewed.', approval });
+  }),
+);
+
 router.get(
   '/internships',
   query('status').optional({ checkFalsy: true }).isIn(['active', 'closed']),
+  query('approval_status').optional({ checkFalsy: true }).isIn(approvalStatuses),
   paginationValidators,
   validateRequest,
   asyncHandler(async (req, res) => {
     const { page, limit, offset } = parsePagination(req);
     const status = req.query.status || null;
+    const approvalStatus = req.query.approval_status || null;
     const q = likeTerm(req.query.q);
     const result = await pool.query(
       `SELECT
@@ -784,6 +848,25 @@ router.get(
         i.type,
         i.deadline,
         i.status,
+        CASE
+          WHEN i.status = 'closed' THEN 'closed'
+          WHEN EXISTS (
+            SELECT 1 FROM internship_university_approvals approved
+            WHERE approved.internship_id = i.id AND approved.status = 'approved'
+          ) THEN 'approved'
+          WHEN EXISTS (
+            SELECT 1 FROM internship_university_approvals rejected
+            WHERE rejected.internship_id = i.id AND rejected.status = 'rejected'
+          ) THEN 'rejected'
+          ELSE 'pending'
+        END AS workflow_status,
+        (
+          SELECT pending_approval.id
+          FROM internship_university_approvals pending_approval
+          WHERE pending_approval.internship_id = i.id
+          ORDER BY pending_approval.created_at DESC, pending_approval.id DESC
+          LIMIT 1
+        ) AS approval_id,
         i.created_at,
         COUNT(a.id)::int AS application_count
        FROM internships i
@@ -791,18 +874,36 @@ router.get(
        LEFT JOIN applications a ON a.internship_id = i.id
        WHERE ($1::text IS NULL OR i.status = $1)
          AND ($2 = '%%' OR i.title ILIKE $2 OR i.location ILIKE $2 OR r.company_name ILIKE $2)
+         AND (
+           $3::text IS NULL
+           OR ($3 = 'closed' AND i.status = 'closed')
+           OR EXISTS (
+             SELECT 1 FROM internship_university_approvals filtered_approval
+             WHERE filtered_approval.internship_id = i.id
+               AND filtered_approval.status = $3
+           )
+         )
        GROUP BY i.id, r.company_name
        ORDER BY i.created_at DESC
-       LIMIT $3 OFFSET $4`,
-      [status, q, limit, offset],
+       LIMIT $4 OFFSET $5`,
+      [status, q, approvalStatus, limit, offset],
     );
     const count = await pool.query(
       `SELECT COUNT(*)::int AS total
        FROM internships i
        JOIN recruiters r ON r.id = i.recruiter_id
        WHERE ($1::text IS NULL OR i.status = $1)
-         AND ($2 = '%%' OR i.title ILIKE $2 OR i.location ILIKE $2 OR r.company_name ILIKE $2)`,
-      [status, q],
+         AND ($2 = '%%' OR i.title ILIKE $2 OR i.location ILIKE $2 OR r.company_name ILIKE $2)
+         AND (
+           $3::text IS NULL
+           OR ($3 = 'closed' AND i.status = 'closed')
+           OR EXISTS (
+             SELECT 1 FROM internship_university_approvals filtered_approval
+             WHERE filtered_approval.internship_id = i.id
+               AND filtered_approval.status = $3
+           )
+         )`,
+      [status, q, approvalStatus],
     );
 
     res.json({
@@ -880,6 +981,61 @@ router.patch(
 );
 
 router.get(
+  '/applications',
+  query('status').optional({ checkFalsy: true }).isIn(applicationStatuses),
+  paginationValidators,
+  validateRequest,
+  asyncHandler(async (req, res) => {
+    const { page, limit, offset } = parsePagination(req);
+    const status = req.query.status || null;
+    const q = likeTerm(req.query.q);
+    const result = await pool.query(
+      `SELECT
+        a.id,
+        a.status,
+        a.applied_at,
+        a.updated_at,
+        u.full_name AS student_name,
+        u.email AS student_email,
+        i.title AS internship_title,
+        COALESCE(i.company_name, r.company_name) AS company_name
+       FROM applications a
+       JOIN users u ON u.id = a.student_id
+       JOIN internships i ON i.id = a.internship_id
+       JOIN recruiters r ON r.id = i.recruiter_id
+       WHERE ($1::text IS NULL OR a.status = $1)
+         AND ($2 = '%%'
+              OR u.full_name ILIKE $2
+              OR u.email::text ILIKE $2
+              OR i.title ILIKE $2
+              OR r.company_name ILIKE $2)
+       ORDER BY a.applied_at DESC
+       LIMIT $3 OFFSET $4`,
+      [status, q, limit, offset],
+    );
+    const count = await pool.query(
+      `SELECT COUNT(*)::int AS total
+       FROM applications a
+       JOIN users u ON u.id = a.student_id
+       JOIN internships i ON i.id = a.internship_id
+       JOIN recruiters r ON r.id = i.recruiter_id
+       WHERE ($1::text IS NULL OR a.status = $1)
+         AND ($2 = '%%'
+              OR u.full_name ILIKE $2
+              OR u.email::text ILIKE $2
+              OR i.title ILIKE $2
+              OR r.company_name ILIKE $2)`,
+      [status, q],
+    );
+
+    return res.json({
+      applications: result.rows,
+      pagination: pageMeta(count.rows[0].total, page, limit),
+    });
+  }),
+);
+
+router.get(
   '/students',
   paginationValidators,
   validateRequest,
@@ -922,13 +1078,28 @@ router.get(
     const { page, limit, offset } = parsePagination(req);
     const q = likeTerm(req.query.q);
     const result = await pool.query(
-      `SELECT id, company_name, recruiter_name, email, contact, country, city, created_at
-       FROM recruiters
+      `SELECT
+        r.id,
+        r.company_name,
+        r.recruiter_name,
+        r.email,
+        r.contact,
+        r.country,
+        r.city,
+        r.created_at,
+        COALESCE((
+          SELECT rv.status
+          FROM recruiter_verifications rv
+          WHERE rv.recruiter_id = r.id
+          ORDER BY rv.created_at DESC, rv.id DESC
+          LIMIT 1
+        ), 'pending') AS verification_status
+       FROM recruiters r
        WHERE $1 = '%%'
-          OR company_name ILIKE $1
-          OR recruiter_name ILIKE $1
-          OR email::text ILIKE $1
-       ORDER BY created_at DESC
+          OR r.company_name ILIKE $1
+          OR r.recruiter_name ILIKE $1
+          OR r.email::text ILIKE $1
+       ORDER BY r.created_at DESC
        LIMIT $2 OFFSET $3`,
       [q, limit, offset],
     );

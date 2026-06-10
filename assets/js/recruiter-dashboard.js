@@ -73,6 +73,42 @@
     );
   }
 
+  function renderVerification(recruiter, form) {
+    var status = recruiter && recruiter.verification_status ? recruiter.verification_status : 'pending';
+    var badge = document.getElementById('recruiter-verification-status');
+    var note = document.getElementById('recruiter-verification-note');
+    var approved = status === 'approved';
+
+    badge.className = 'ig-status-badge ig-status-' + status;
+    badge.textContent = approved ? 'Verified Company' : status.charAt(0).toUpperCase() + status.slice(1);
+    note.textContent = approved
+      ? 'Your company is verified. New internships will enter university approval before publication.'
+      : status === 'rejected'
+        ? 'Verification was rejected. ' + (recruiter.verification_note || 'Contact the system administrator for next steps.')
+        : 'Your company is awaiting system-admin verification. Internship publishing is disabled until approval.';
+
+    Array.prototype.forEach.call(form.elements, function (element) {
+      element.disabled = !approved;
+    });
+  }
+
+  function renderNotifications(items) {
+    if (!items.length) {
+      return '<div class="ig-empty-state"><h3>No notifications</h3><p>Workflow updates will appear here.</p></div>';
+    }
+
+    return items
+      .map(function (item) {
+        return [
+          '<article class="portal-notification-item' + (item.is_read ? '' : ' is-unread') + '">',
+          '<div><strong>' + escapeHtml(item.title) + '</strong><p>' + escapeHtml(item.message) + '</p><span>' + escapeHtml(formatDate(item.created_at)) + '</span></div>',
+          item.is_read ? '' : '<button class="ig-button ig-button-secondary" type="button" data-notification-id="' + item.id + '">Mark read</button>',
+          '</article>',
+        ].join('');
+      })
+      .join('');
+  }
+
   function fillForm(form, internship) {
     Object.keys(internship).forEach(function (key) {
       var field = form.querySelector('[name="' + key + '"]');
@@ -131,6 +167,7 @@
     var currentUser = window.InternGuideAPI.getCurrentUser();
     var form = document.getElementById('internship-form');
     var tableBody = document.getElementById('internship-table-body');
+    var notifications = document.getElementById('recruiter-notifications');
     var internships = [];
 
     if (!currentUser || currentUser.role !== 'recruiter') {
@@ -145,10 +182,20 @@
       try {
         var result = await window.InternGuideAPI.getRecruiterInternships();
         internships = result.internships || [];
+        renderVerification(result.recruiter || {}, form);
         renderStatistics(internships);
         tableBody.innerHTML = renderRows(internships);
       } catch (error) {
         tableBody.innerHTML = emptyTable('Unable to load internships', error.message || 'Refresh the page and try again.');
+      }
+    }
+
+    async function loadNotifications() {
+      try {
+        var result = await window.InternGuideAPI.listNotifications({ limit: 8 });
+        notifications.innerHTML = renderNotifications(result.notifications || []);
+      } catch (error) {
+        notifications.innerHTML = '<p>Notifications are unavailable.</p>';
       }
     }
 
@@ -166,7 +213,7 @@
           setMessage('Internship updated.', 'success');
         } else {
           await window.InternGuideAPI.createInternship(values);
-          setMessage('Internship posted.', 'success');
+          setMessage('Internship submitted for university approval.', 'success');
         }
 
         resetForm(form);
@@ -217,6 +264,20 @@
       window.location.href = '../recruiter_login.html';
     });
 
+    notifications.addEventListener('click', async function (event) {
+      var id = event.target.dataset.notificationId;
+      if (id) {
+        await window.InternGuideAPI.markNotificationRead(id);
+        await loadNotifications();
+      }
+    });
+
+    document.getElementById('recruiter-read-notifications').addEventListener('click', async function () {
+      await window.InternGuideAPI.markAllNotificationsRead();
+      await loadNotifications();
+    });
+
     loadInternships();
+    loadNotifications();
   });
 })();

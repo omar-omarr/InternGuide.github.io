@@ -224,6 +224,9 @@
         auth: true,
       });
     },
+    withdrawApplication: function (id) {
+      return request('/applications/' + encodeURIComponent(id) + '/withdraw', { method: 'PATCH', auth: true });
+    },
     downloadApplicationResume: function (id) {
       return download('/applications/' + encodeURIComponent(id) + '/resume');
     },
@@ -244,6 +247,15 @@
     },
     updateStudentUniversityProfile: function (data) {
       return request('/student/university-profile', { method: 'PATCH', body: data, auth: true });
+    },
+    listNotifications: function (params) {
+      return request('/notifications' + buildQuery(params), { auth: true });
+    },
+    markNotificationRead: function (id) {
+      return request('/notifications/' + encodeURIComponent(id) + '/read', { method: 'PATCH', auth: true });
+    },
+    markAllNotificationsRead: function () {
+      return request('/notifications/read-all', { method: 'PATCH', auth: true });
     },
   };
 })();

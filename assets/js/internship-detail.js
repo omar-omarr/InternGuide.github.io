@@ -38,10 +38,15 @@
   }
 
   function renderDetails(internship) {
+    var verifiedCompany = internship.recruiter_verified
+      ? '<span class="ig-verified-company-badge"><i class="fa fa-shield"></i> Verified Company</span>'
+      : '';
+
     return [
       '<div class="single-job mb-4">',
       '  <div class="job-text">',
       '    <span class="ig-approved-badge"><i class="fa fa-check-circle"></i> University Approved</span>',
+      '    ' + verifiedCompany,
       '    <h3>' + escapeHtml(internship.title) + '</h3>',
       '    <ul class="mt-4">',
       '      <li class="mb-3"><h5><i class="fa fa-building"></i> ' + escapeHtml(internship.company_name) + '</h5></li>',

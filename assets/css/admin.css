@@ -566,3 +566,80 @@ code {
     font-size: 25px;
   }
 }
+
+.admin-status {
+  border: 1px solid #d0d5dd;
+  border-radius: 999px;
+  display: inline-flex;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 5px 9px;
+  text-transform: capitalize;
+}
+
+.admin-status-approved,
+.admin-status-accepted,
+.admin-status-verified {
+  background: #ecfdf3;
+  border-color: #abefc6;
+  color: #067647;
+}
+
+.admin-status-pending,
+.admin-status-submitted,
+.admin-status-shortlisted,
+.admin-status-interview_scheduled {
+  background: #fffaeb;
+  border-color: #fedf89;
+  color: #b54708;
+}
+
+.admin-status-viewed,
+.admin-status-withdrawn {
+  background: #f2f4f7;
+  border-color: #d0d5dd;
+  color: #475467;
+}
+
+.admin-status-rejected,
+.admin-status-closed {
+  background: #fef3f2;
+  border-color: #fecdca;
+  color: #b42318;
+}
+
+.admin-notification-list {
+  display: grid;
+  gap: 10px;
+}
+
+.admin-notification-item {
+  align-items: center;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  padding: 14px;
+}
+
+.admin-notification-item.is-unread {
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+
+.admin-notification-item p {
+  color: var(--admin-muted);
+  margin: 5px 0;
+}
+
+.admin-notification-item span {
+  color: var(--admin-muted);
+  font-size: 12px;
+}
+
+.admin-empty-state {
+  color: var(--admin-muted);
+  padding: 18px;
+  text-align: center;
+}

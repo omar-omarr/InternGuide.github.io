@@ -14,13 +14,17 @@
     var api = window.InternGuideAdmin;
 
     if (!items.length) {
-      return '<tr><td colspan="6">No internships found.</td></tr>';
+      return '<tr><td colspan="7">No internships found.</td></tr>';
     }
 
     return items
       .map(function (item) {
-        var action = item.status === 'active' ? 'close' : 'reopen';
-        var label = item.status === 'active' ? 'Close' : 'Reopen';
+        var listingAction = item.status === 'active' ? 'close' : 'reopen';
+        var listingLabel = item.status === 'active' ? 'Close' : 'Reopen';
+        var approvalActions =
+          item.workflow_status === 'pending'
+            ? '<button class="admin-button admin-button-small" type="button" data-action="approve" data-approval-id="' + item.approval_id + '">Approve</button> <button class="admin-button admin-button-small admin-button-secondary" type="button" data-action="reject" data-approval-id="' + item.approval_id + '">Reject</button>'
+            : '';
 
         return [
           '<tr>',
@@ -28,8 +32,9 @@
           '  <td>' + api.escapeHtml(item.company_name) + '</td>',
           '  <td>' + api.escapeHtml(item.location) + '</td>',
           '  <td>' + api.escapeHtml(item.status) + '</td>',
+          '  <td><span class="admin-status admin-status-' + api.escapeHtml(item.workflow_status) + '">' + api.escapeHtml(item.workflow_status) + '</span></td>',
           '  <td>' + api.escapeHtml(item.application_count || 0) + '</td>',
-          '  <td><button class="admin-button admin-button-small" type="button" data-action="' + action + '" data-id="' + item.id + '">' + label + '</button></td>',
+          '  <td><div class="admin-actions">' + approvalActions + '<button class="admin-button admin-button-small admin-button-secondary" type="button" data-action="' + listingAction + '" data-id="' + item.id + '">' + listingLabel + '</button></div></td>',
           '</tr>',
         ].join('');
       })
@@ -78,7 +83,7 @@
     });
 
     api.on('admin-internships-table', 'click', async function (event) {
-      var button = event.target.closest('[data-action][data-id]');
+      var button = event.target.closest('[data-action]');
 
       if (!button) {
         return;
@@ -88,7 +93,19 @@
       var action = button.dataset.action;
 
       try {
-        if (action === 'close') {
+        if (action === 'approve' || action === 'reject') {
+          var notes = action === 'reject' ? window.prompt('Enter the rejection reason:') : '';
+
+          if (action === 'reject' && !notes) {
+            return;
+          }
+
+          await api.reviewInternshipApproval(button.dataset.approvalId, {
+            status: action === 'approve' ? 'approved' : 'rejected',
+            notes: notes,
+          });
+          api.setMessage('admin-internships-message', 'Internship approval updated.', 'success');
+        } else if (action === 'close') {
           await api.closeInternship(id);
           api.setMessage('admin-internships-message', 'Internship closed.', 'success');
         } else {

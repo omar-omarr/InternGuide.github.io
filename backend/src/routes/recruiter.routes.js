@@ -4,6 +4,7 @@ const pool = require('../config/db');
 const asyncHandler = require('../utils/asyncHandler');
 const validateRequest = require('../middleware/validate');
 const { authenticateToken, requireRecruiter } = require('../middleware/auth');
+const { createNotification } = require('../services/notification.service');
 
 const router = express.Router();
 const recruiterOnly = [authenticateToken, requireRecruiter];
@@ -13,7 +14,8 @@ router.get(
   '/internships',
   recruiterOnly,
   asyncHandler(async (req, res) => {
-    const result = await pool.query(
+    const [result, recruiterResult] = await Promise.all([
+      pool.query(
       `SELECT
         i.*,
         COALESCE(ac.application_count, 0)::int AS application_count,
@@ -47,9 +49,37 @@ router.get(
        WHERE i.recruiter_id = $1
        ORDER BY i.created_at DESC`,
       [req.auth.id],
-    );
+      ),
+      pool.query(
+        `SELECT
+          r.id,
+          r.company_name,
+          r.recruiter_name,
+          r.email,
+          COALESCE((
+            SELECT rv.status
+            FROM recruiter_verifications rv
+            WHERE rv.recruiter_id = r.id
+            ORDER BY rv.created_at DESC, rv.id DESC
+            LIMIT 1
+          ), 'pending') AS verification_status,
+          (
+            SELECT rv.rejection_reason
+            FROM recruiter_verifications rv
+            WHERE rv.recruiter_id = r.id
+            ORDER BY rv.created_at DESC, rv.id DESC
+            LIMIT 1
+          ) AS verification_note
+         FROM recruiters r
+         WHERE r.id = $1`,
+        [req.auth.id],
+      ),
+    ]);
 
-    return res.json({ internships: result.rows });
+    return res.json({
+      recruiter: recruiterResult.rows[0],
+      internships: result.rows,
+    });
   }),
 );
 
@@ -67,6 +97,28 @@ router.get(
     if (!ownership.rows[0]) {
       return res.status(404).json({ message: 'Internship not found or not owned by this recruiter.' });
     }
+
+    const newlyViewed = await pool.query(
+      `UPDATE applications
+       SET status = 'viewed',
+           updated_at = NOW()
+       WHERE internship_id = $1
+         AND status = 'submitted'
+       RETURNING id, student_id`,
+      [req.params.id],
+    );
+
+    await Promise.all(
+      newlyViewed.rows.map((application) =>
+        createNotification({
+          recipientRole: 'student',
+          recipientId: application.student_id,
+          title: 'Application viewed',
+          message: `Your application for "${ownership.rows[0].title}" was viewed by the recruiter.`,
+          type: 'application_status_changed',
+        }),
+      ),
+    );
 
     const result = await pool.query(
       `SELECT

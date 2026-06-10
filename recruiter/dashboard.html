@@ -26,6 +26,14 @@
     <div class="portal-heading"><span class="ig-eyebrow">Recruiter Workspace</span><h1>Internship dashboard</h1><p>Post opportunities, manage active listings, and review student applicants.</p></div>
     <div id="dashboard-message" class="portal-message"></div>
 
+    <section class="portal-card recruiter-verification-card">
+      <div class="portal-card-header">
+        <div><h2>Company verification</h2><p>Only approved companies can submit internships for university approval.</p></div>
+        <span id="recruiter-verification-status" class="ig-status-badge ig-status-pending">Checking...</span>
+      </div>
+      <p id="recruiter-verification-note" class="portal-helper-text">Loading your company verification status.</p>
+    </section>
+
     <section class="portal-stat-grid" aria-label="Recruiter dashboard statistics">
       <article class="portal-stat-card"><span class="portal-stat-icon"><i class="fa fa-briefcase"></i></span><div><strong id="recruiter-posted-count">0</strong><span>Posted Internships</span></div></article>
       <article class="portal-stat-card"><span class="portal-stat-icon"><i class="fa fa-play-circle-o"></i></span><div><strong id="recruiter-active-count">0</strong><span>Active Internships</span></div></article>
@@ -62,6 +70,11 @@
           <tbody id="internship-table-body"><tr><td colspan="8">Loading internships...</td></tr></tbody>
         </table>
       </div>
+    </section>
+
+    <section class="portal-card">
+      <div class="portal-card-header"><div><h2>Notifications</h2><p>Verification, approval, and applicant updates.</p></div><button class="ig-button ig-button-secondary" id="recruiter-read-notifications" type="button">Mark all read</button></div>
+      <div id="recruiter-notifications" class="portal-notification-list"><p>Loading notifications...</p></div>
     </section>
   </main>
   <script src="../assets/js/config.js"></script>

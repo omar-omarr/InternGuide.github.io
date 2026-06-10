@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Applications | InternGuide Admin</title>
+  <link rel="shortcut icon" href="../assets/images/logo/icon.png" type="image/x-icon">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body class="admin-page">
+  <div class="admin-shell">
+    <aside class="admin-sidebar" aria-label="System admin navigation">
+      <a class="admin-brand" href="dashboard.html"><img src="../assets/images/logo/icon.png" alt="InternGuide"><div><span>InternGuide</span><small>System Admin</small></div></a>
+      <nav class="admin-nav">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="universities.html">Universities</a>
+        <a href="recruiter-verifications.html">Verifications</a>
+        <a href="internships.html">Internships</a>
+        <a class="active" href="applications.html">Applications</a>
+        <a href="users.html">Users</a>
+        <a href="audit-logs.html">Audit Logs</a>
+      </nav>
+      <div class="admin-sidebar-footer"><a href="../index.html">Public site</a><a href="#" id="admin-logout-link">Logout</a></div>
+    </aside>
+    <main class="admin-main">
+      <header class="admin-topbar"><div><span class="admin-kicker">System Admin</span><h1>Applications</h1></div><a class="admin-home-link" href="../index.html">Public site</a></header>
+      <div class="admin-content">
+        <div id="admin-applications-message" class="admin-message" role="alert"></div>
+        <section class="admin-panel">
+          <div class="admin-panel-header"><h2>Platform application tracking</h2></div>
+          <form id="admin-application-filter-form" class="admin-filter-form">
+            <div class="admin-field"><label for="admin-application-search">Search</label><input id="admin-application-search" name="q" type="search" class="admin-input" placeholder="Student, internship, company"></div>
+            <div class="admin-field"><label for="admin-application-status">Status</label><select id="admin-application-status" name="status" class="admin-input"><option value="">all</option><option value="submitted">submitted</option><option value="viewed">viewed</option><option value="shortlisted">shortlisted</option><option value="interview_scheduled">interview scheduled</option><option value="accepted">accepted</option><option value="rejected">rejected</option><option value="withdrawn">withdrawn</option></select></div>
+            <button type="submit" class="admin-button">Load</button>
+          </form>
+          <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Student</th><th>Email</th><th>Internship</th><th>Company</th><th>Status</th><th>Applied</th><th>Updated</th></tr></thead><tbody id="admin-applications-table"><tr><td colspan="7">Loading applications...</td></tr></tbody></table></div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/admin/admin-api.js"></script>
+  <script src="../assets/js/admin/admin-applications.js"></script>
+</body>
+</html>

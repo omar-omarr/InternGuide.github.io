@@ -5,12 +5,8 @@ const multer = require('multer');
 
 const defaultResumeDir = path.join(__dirname, '..', '..', 'uploads', 'resumes');
 const resumeDir = path.resolve(process.env.UPLOAD_DIR || process.env.RAILWAY_VOLUME_MOUNT_PATH || defaultResumeDir);
-const allowedExtensions = new Set(['.pdf', '.doc', '.docx']);
-const allowedMimeTypes = new Set([
-  'application/pdf',
-  'application/msword',
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-]);
+const allowedExtensions = new Set(['.pdf']);
+const allowedMimeTypes = new Set(['application/pdf']);
 
 fs.mkdirSync(resumeDir, { recursive: true, mode: 0o700 });
 
@@ -26,7 +22,7 @@ function resumeFileFilter(req, file, cb) {
   const ext = path.extname(file.originalname).toLowerCase();
 
   if (!allowedExtensions.has(ext) || !allowedMimeTypes.has(file.mimetype)) {
-    return cb(new Error('Resume must be a PDF, DOC, or DOCX file.'));
+    return cb(new Error('Resume must be a PDF file.'));
   }
 
   return cb(null, true);

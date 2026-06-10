@@ -36,7 +36,7 @@
     var api = window.InternGuideAdmin;
 
     if (!items.length) {
-      return '<tr><td colspan="5">No recruiters found.</td></tr>';
+      return '<tr><td colspan="6">No recruiters found.</td></tr>';
     }
 
     return items
@@ -47,6 +47,7 @@
           '  <td>' + api.escapeHtml(recruiter.recruiter_name) + '</td>',
           '  <td>' + api.escapeHtml(recruiter.email) + '</td>',
           '  <td>' + api.escapeHtml([recruiter.city, recruiter.country].filter(Boolean).join(', ')) + '</td>',
+          '  <td><span class="admin-status admin-status-' + api.escapeHtml(recruiter.verification_status) + '">' + api.escapeHtml(recruiter.verification_status) + '</span></td>',
           '  <td>' + api.escapeHtml(api.formatDate(recruiter.created_at)) + '</td>',
           '</tr>',
         ].join('');

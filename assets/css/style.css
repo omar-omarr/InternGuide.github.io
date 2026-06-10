@@ -6025,3 +6025,91 @@ body {
     gap: 8px;
   }
 }
+
+.ig-verified-company-badge {
+  align-items: center;
+  background: #eef4ff;
+  border: 1px solid #c7d7fe;
+  border-radius: 999px;
+  color: #1849a9;
+  display: inline-flex;
+  font-size: 11px;
+  font-weight: 800;
+  gap: 6px;
+  margin: 0 0 12px 8px;
+  padding: 6px 10px;
+}
+
+.portal-helper-text {
+  color: var(--ig-muted);
+  line-height: 1.65;
+  margin: 0;
+}
+
+.portal-notification-list {
+  display: grid;
+  gap: 12px;
+}
+
+.portal-notification-item {
+  align-items: center;
+  border: 1px solid var(--ig-line);
+  border-radius: 12px;
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  padding: 14px 16px;
+}
+
+.portal-notification-item.is-unread {
+  background: #fffaf4;
+  border-color: #f2cf9f;
+}
+
+.portal-notification-item strong {
+  color: var(--ig-ink);
+}
+
+.portal-notification-item p {
+  color: var(--ig-muted);
+  margin: 5px 0;
+}
+
+.portal-notification-item span {
+  color: var(--ig-muted);
+  font-size: 12px;
+}
+
+.application-timeline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.application-timeline span {
+  background: #f2f4f7;
+  border-radius: 999px;
+  color: #667085;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 5px 8px;
+}
+
+.application-timeline span.is-complete {
+  background: #ecfdf3;
+  color: #067647;
+}
+
+.ig-status-viewed,
+.ig-status-interview_scheduled {
+  background: #eef4ff;
+  border-color: #c7d7fe;
+  color: #1849a9;
+}
+
+.ig-status-withdrawn {
+  background: #f2f4f7;
+  border-color: #d0d5dd;
+  color: #475467;
+}

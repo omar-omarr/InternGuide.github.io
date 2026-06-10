@@ -337,6 +337,13 @@
     getInternship: function (id) {
       return request('/system-admin/internships/' + encodeURIComponent(id), { auth: true });
     },
+    reviewInternshipApproval: function (id, data) {
+      return request('/system-admin/internship-approvals/' + encodeURIComponent(id) + '/review', {
+        method: 'PATCH',
+        body: data,
+        auth: true,
+      });
+    },
     closeInternship: function (id) {
       return request('/system-admin/internships/' + encodeURIComponent(id) + '/close', { method: 'PATCH', auth: true });
     },
@@ -348,6 +355,18 @@
     },
     listRecruiters: function (params) {
       return request('/system-admin/recruiters' + buildQuery(params), { auth: true });
+    },
+    listApplications: function (params) {
+      return request('/system-admin/applications' + buildQuery(params), { auth: true });
+    },
+    listNotifications: function (params) {
+      return request('/notifications' + buildQuery(params), { auth: true });
+    },
+    markNotificationRead: function (id) {
+      return request('/notifications/' + encodeURIComponent(id) + '/read', { method: 'PATCH', auth: true });
+    },
+    markAllNotificationsRead: function () {
+      return request('/notifications/read-all', { method: 'PATCH', auth: true });
     },
     listAuditLogs: function (params) {
       return request('/system-admin/audit-logs' + buildQuery(params), { auth: true });

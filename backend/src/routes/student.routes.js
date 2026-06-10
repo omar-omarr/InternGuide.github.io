@@ -15,6 +15,11 @@ const profileValidators = [
   body('university_id').isInt({ min: 1 }).withMessage('University is required.'),
   body('department_id').optional({ checkFalsy: true }).isInt({ min: 1 }).withMessage('Invalid department.'),
   body('student_number').trim().isLength({ min: 1, max: 80 }).withMessage('Student number is required.'),
+  body('faculty').trim().isLength({ min: 2, max: 160 }).withMessage('Faculty is required.'),
+  body('major').trim().isLength({ min: 2, max: 160 }).withMessage('Major is required.'),
+  body('academic_year').trim().isLength({ min: 1, max: 80 }).withMessage('Academic year is required.'),
+  body('skills').trim().isLength({ min: 2, max: 2000 }).withMessage('Add at least one skill.'),
+  body('gpa').optional({ checkFalsy: true }).isFloat({ min: 0, max: 4 }).withMessage('GPA must be between 0 and 4.'),
 ];
 
 async function getCurrentProfile(studentId) {
@@ -25,6 +30,11 @@ async function getCurrentProfile(studentId) {
       sup.university_id,
       sup.department_id,
       sup.student_number,
+      sup.faculty,
+      sup.major,
+      sup.academic_year,
+      sup.skills,
+      sup.gpa,
       sup.verification_status,
       sup.verified_at,
       sup.rejection_reason,
@@ -103,6 +113,11 @@ async function upsertProfile(req, res) {
   const universityId = Number(req.body.university_id);
   const departmentId = req.body.department_id ? Number(req.body.department_id) : null;
   const studentNumber = req.body.student_number.trim();
+  const faculty = req.body.faculty.trim();
+  const major = req.body.major.trim();
+  const academicYear = req.body.academic_year.trim();
+  const skills = req.body.skills.trim();
+  const gpa = req.body.gpa ? Number(req.body.gpa) : null;
   const selection = await validateUniversitySelection(universityId, departmentId);
 
   if (selection.error) {
@@ -110,10 +125,6 @@ async function upsertProfile(req, res) {
   }
 
   const existing = await getCurrentProfile(req.auth.id);
-
-  if (existing && existing.verification_status === 'verified') {
-    return res.status(409).json({ message: 'Verified university profiles cannot be edited.' });
-  }
 
   let profile;
 
@@ -123,24 +134,30 @@ async function upsertProfile(req, res) {
        SET university_id = $1,
            department_id = $2,
            student_number = $3,
+           faculty = $4,
+           major = $5,
+           academic_year = $6,
+           skills = $7,
+           gpa = $8,
            verification_status = 'pending',
            verified_by = NULL,
            verified_at = NULL,
            rejection_reason = NULL,
            updated_at = NOW()
-       WHERE id = $4
-         AND student_id = $5
+       WHERE id = $9
+         AND student_id = $10
        RETURNING *`,
-      [universityId, departmentId, studentNumber, existing.id, req.auth.id],
+      [universityId, departmentId, studentNumber, faculty, major, academicYear, skills, gpa, existing.id, req.auth.id],
     );
     profile = result.rows[0];
   } else {
     try {
       const result = await pool.query(
-        `INSERT INTO student_university_profiles (student_id, university_id, department_id, student_number)
-         VALUES ($1, $2, $3, $4)
+        `INSERT INTO student_university_profiles
+          (student_id, university_id, department_id, student_number, faculty, major, academic_year, skills, gpa)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
          RETURNING *`,
-        [req.auth.id, universityId, departmentId, studentNumber],
+        [req.auth.id, universityId, departmentId, studentNumber, faculty, major, academicYear, skills, gpa],
       );
       profile = result.rows[0];
     } catch (error) {
@@ -163,6 +180,9 @@ async function upsertProfile(req, res) {
     metadata: {
       universityId,
       departmentId,
+      faculty,
+      major,
+      academicYear,
       studentId: req.auth.id,
       notifiedAdmins,
     },
@@ -243,7 +263,13 @@ router.get(
       student.study_year,
       student.address,
       student.resume_path,
-      profile,
+      profile?.university_id,
+      profile?.department_id,
+      profile?.student_number,
+      profile?.faculty,
+      profile?.major,
+      profile?.academic_year,
+      profile?.skills,
     ];
     const completedFields = completionFields.filter(Boolean).length;
 

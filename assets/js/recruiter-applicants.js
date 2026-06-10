@@ -28,10 +28,12 @@
   function statusLabel(status) {
     return {
       submitted: 'Applied',
-      reviewed: 'Under Review',
+      viewed: 'Viewed',
       shortlisted: 'Shortlisted',
+      interview_scheduled: 'Interview Scheduled',
       rejected: 'Rejected',
       accepted: 'Accepted',
+      withdrawn: 'Withdrawn',
     }[status] || status;
   }
 
@@ -75,12 +77,14 @@
           '  <td><button class="template-btn" type="button" data-download-resume="' + application.id + '">Download</button></td>',
           '  <td><div class="application-status-control">',
           '    ' + statusBadge(application.status),
-          '    <select data-application-id="' + application.id + '">',
+          '    <select data-application-id="' + application.id + '"' + (application.status === 'withdrawn' ? ' disabled' : '') + '>',
           '      <option value="submitted"' + (application.status === 'submitted' ? ' selected' : '') + '>Applied</option>',
-          '      <option value="reviewed"' + (application.status === 'reviewed' ? ' selected' : '') + '>Under Review</option>',
+          '      <option value="viewed"' + (application.status === 'viewed' ? ' selected' : '') + '>Viewed</option>',
           '      <option value="shortlisted"' + (application.status === 'shortlisted' ? ' selected' : '') + '>Shortlisted</option>',
+          '      <option value="interview_scheduled"' + (application.status === 'interview_scheduled' ? ' selected' : '') + '>Interview Scheduled</option>',
           '      <option value="rejected"' + (application.status === 'rejected' ? ' selected' : '') + '>Rejected</option>',
           '      <option value="accepted"' + (application.status === 'accepted' ? ' selected' : '') + '>Accepted</option>',
+          application.status === 'withdrawn' ? '      <option value="withdrawn" selected>Withdrawn</option>' : '',
           '    </select>',
           '  </div></td>',
           '</tr>',

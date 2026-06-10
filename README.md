@@ -77,12 +77,14 @@ Run non-destructive migrations when present:
 ```bash
 psql -h localhost -U postgres -d internguide -f db/migrations/20260603_add_common_indexes.sql
 psql -h localhost -U postgres -d internguide -f db/migrations/20260603_add_admin_university_foundation.sql
+npm run migrate:portal-upgrade
 ```
 
-If `psql` is not on PATH, run the admin/university foundation migration through Node:
+If `psql` is not on PATH, run migrations through Node:
 
 ```bash
 npm run migrate:admin-foundation
+npm run migrate:portal-upgrade
 ```
 
 Seed local-only demo university/admin accounts:
@@ -253,7 +255,7 @@ After starting PostgreSQL and the backend:
 3. Create and log in as a recruiter.
 4. Create an internship as a recruiter.
 5. Confirm internships appear in the public listing.
-6. Apply as a student with a PDF, DOC, or DOCX resume.
+6. Apply as a student with a PDF resume.
 7. View applicants as the owning recruiter and download the resume.
 8. Log in as the demo system admin and open `/api/system-admin/health`.
 9. Log in as the demo university admin and open `/api/university/health`.

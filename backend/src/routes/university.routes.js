@@ -10,7 +10,15 @@ const { createNotification } = require('../services/notification.service');
 const router = express.Router();
 const studentVerificationStatuses = ['pending', 'verified', 'rejected'];
 const approvalStatuses = ['pending', 'approved', 'rejected'];
-const applicationStatuses = ['submitted', 'reviewed', 'shortlisted', 'rejected', 'accepted'];
+const applicationStatuses = [
+  'submitted',
+  'viewed',
+  'shortlisted',
+  'interview_scheduled',
+  'accepted',
+  'rejected',
+  'withdrawn',
+];
 const reviewStatuses = ['approved', 'rejected'];
 const verifyStatuses = ['verified', 'rejected'];
 
@@ -172,6 +180,11 @@ router.get(
         sup.university_id,
         sup.department_id,
         sup.student_number,
+        sup.faculty,
+        sup.major AS profile_major,
+        sup.academic_year,
+        sup.skills,
+        sup.gpa,
         sup.verification_status,
         sup.verified_at,
         sup.rejection_reason,
@@ -232,6 +245,11 @@ router.get(
         sup.university_id,
         sup.department_id,
         sup.student_number,
+        sup.faculty,
+        sup.major AS profile_major,
+        sup.academic_year,
+        sup.skills,
+        sup.gpa,
         sup.verification_status,
         sup.verified_by,
         sup.verified_at,

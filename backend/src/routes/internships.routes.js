@@ -5,6 +5,7 @@ const asyncHandler = require('../utils/asyncHandler');
 const validateRequest = require('../middleware/validate');
 const { authenticateToken, requireRecruiter, requireStudent } = require('../middleware/auth');
 const { removeUploadedFile, resumeUpload } = require('../middleware/upload');
+const { createNotification } = require('../services/notification.service');
 
 const router = express.Router();
 const publicApprovalFilter = `EXISTS (
@@ -68,6 +69,49 @@ const internshipValidators = [
 
 const idValidator = [param('id').isInt({ min: 1 }).withMessage('Invalid internship id.')];
 
+async function requireApprovedRecruiter(req, res, next) {
+  const result = await pool.query(
+    `SELECT status
+     FROM recruiter_verifications
+     WHERE recruiter_id = $1
+     ORDER BY created_at DESC, id DESC
+     LIMIT 1`,
+    [req.auth.id],
+  );
+
+  if (!result.rows[0] || result.rows[0].status !== 'approved') {
+    return res.status(403).json({
+      message: 'Your company must be verified by an admin before you can publish internships.',
+      verificationStatus: result.rows[0]?.status || 'pending',
+    });
+  }
+
+  return next();
+}
+
+async function notifyUniversityAdmins(universityId, internship) {
+  const admins = await pool.query(
+    `SELECT id
+     FROM admin_users
+     WHERE role = 'university_admin'
+       AND university_id = $1
+       AND status = 'active'`,
+    [universityId],
+  );
+
+  await Promise.all(
+    admins.rows.map((admin) =>
+      createNotification({
+        recipientRole: 'university_admin',
+        recipientId: admin.id,
+        title: 'Internship approval required',
+        message: `"${internship.title}" was submitted for university approval.`,
+        type: 'internship_approval_submitted',
+      }),
+    ),
+  );
+}
+
 router.get(
   '/',
   asyncHandler(async (req, res) => {
@@ -112,6 +156,12 @@ router.get(
         i.deadline,
         i.status,
         'approved' AS approval_status,
+        EXISTS (
+          SELECT 1
+          FROM recruiter_verifications rv
+          WHERE rv.recruiter_id = r.id
+            AND rv.status = 'approved'
+        ) AS recruiter_verified,
         i.created_at
        FROM internships i
        JOIN recruiters r ON r.id = i.recruiter_id
@@ -144,6 +194,12 @@ router.get(
         i.deadline,
         i.status,
         'approved' AS approval_status,
+        EXISTS (
+          SELECT 1
+          FROM recruiter_verifications rv
+          WHERE rv.recruiter_id = r.id
+            AND rv.status = 'approved'
+        ) AS recruiter_verified,
         i.created_at,
         i.updated_at
        FROM internships i
@@ -166,6 +222,7 @@ router.post(
   '/',
   authenticateToken,
   requireRecruiter,
+  requireApprovedRecruiter,
   internshipValidators,
   validateRequest,
   asyncHandler(async (req, res) => {
@@ -203,10 +260,13 @@ router.post(
       );
 
       await client.query('COMMIT');
+      await notifyUniversityAdmins(university.id, internship).catch((error) => {
+        console.error('Failed to notify university admins about internship submission:', error.message);
+      });
 
       return res.status(201).json({
-        message: 'Internship created.',
-        internship,
+        message: 'Internship created and submitted for university approval.',
+        internship: { ...internship, approval_status: 'pending', workflow_status: 'pending' },
       });
     } catch (error) {
       await client.query('ROLLBACK');
@@ -221,49 +281,73 @@ router.put(
   '/:id',
   authenticateToken,
   requireRecruiter,
+  requireApprovedRecruiter,
   idValidator,
   internshipValidators,
   validateRequest,
   asyncHandler(async (req, res) => {
-    const result = await pool.query(
-      `UPDATE internships
-       SET title = $1,
-           company_name = $2,
-           description = $3,
-           location = $4,
-           category = $5,
-           type = $6,
-           requirements = $7,
-           stipend = $8,
-           deadline = $9,
-           status = COALESCE($10, status),
-           updated_at = NOW()
-       WHERE id = $11 AND recruiter_id = $12
-       RETURNING *`,
-      [
-        req.body.title.trim(),
-        req.body.company_name || null,
-        req.body.description.trim(),
-        req.body.location.trim(),
-        req.body.category || null,
-        req.body.type,
-        req.body.requirements || null,
-        req.body.stipend || null,
-        req.body.deadline || null,
-        req.body.status || null,
-        req.params.id,
-        req.auth.id,
-      ],
-    );
+    const client = await pool.connect();
 
-    if (!result.rows[0]) {
-      return res.status(404).json({ message: 'Internship not found or not owned by this recruiter.' });
+    try {
+      await client.query('BEGIN');
+      const result = await client.query(
+        `UPDATE internships
+         SET title = $1,
+             company_name = $2,
+             description = $3,
+             location = $4,
+             category = $5,
+             type = $6,
+             requirements = $7,
+             stipend = $8,
+             deadline = $9,
+             status = COALESCE($10, status),
+             updated_at = NOW()
+         WHERE id = $11 AND recruiter_id = $12
+         RETURNING *`,
+        [
+          req.body.title.trim(),
+          req.body.company_name || null,
+          req.body.description.trim(),
+          req.body.location.trim(),
+          req.body.category || null,
+          req.body.type,
+          req.body.requirements || null,
+          req.body.stipend || null,
+          req.body.deadline || null,
+          req.body.status || null,
+          req.params.id,
+          req.auth.id,
+        ],
+      );
+
+      if (!result.rows[0]) {
+        await client.query('ROLLBACK');
+        return res.status(404).json({ message: 'Internship not found or not owned by this recruiter.' });
+      }
+
+      await client.query(
+        `UPDATE internship_university_approvals
+         SET status = 'pending',
+             reviewed_by = NULL,
+             reviewed_at = NULL,
+             notes = NULL,
+             updated_at = NOW()
+         WHERE internship_id = $1`,
+        [req.params.id],
+      );
+      await client.query('COMMIT');
+
+      return res.json({
+        message: 'Internship updated and resubmitted for university approval.',
+        internship: { ...result.rows[0], approval_status: 'pending', workflow_status: 'pending' },
+      });
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
     }
-
-    return res.json({
-      message: 'Internship updated.',
-      internship: result.rows[0],
-    });
   }),
 );
 
@@ -301,7 +385,7 @@ router.post(
     }
 
     const internship = await pool.query(
-      `SELECT i.id
+      `SELECT i.id, i.recruiter_id, i.title
        FROM internships i
        WHERE i.id = $1
          AND i.status = $2
@@ -321,6 +405,15 @@ router.post(
          RETURNING *`,
         [req.params.id, req.auth.id, req.body.cover_letter || null, req.file.filename],
       );
+      await createNotification({
+        recipientRole: 'recruiter',
+        recipientId: internship.rows[0].recruiter_id,
+        title: 'New internship application',
+        message: `A student applied to "${internship.rows[0].title}".`,
+        type: 'application_submitted',
+      }).catch((error) => {
+        console.error('Failed to notify recruiter about application submission:', error.message);
+      });
 
       return res.status(201).json({
         message: 'Application submitted.',

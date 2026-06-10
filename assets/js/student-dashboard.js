@@ -22,10 +22,12 @@
   function statusLabel(status) {
     return {
       submitted: 'Applied',
-      reviewed: 'Under Review',
+      viewed: 'Viewed',
       shortlisted: 'Shortlisted',
+      interview_scheduled: 'Interview Scheduled',
       accepted: 'Accepted',
       rejected: 'Rejected',
+      withdrawn: 'Withdrawn',
       pending: 'Pending',
       verified: 'Verified',
       complete: 'Resume Ready',
@@ -66,10 +68,21 @@
 
     return applications
       .map(function (application) {
+        var activeStatuses = ['submitted', 'viewed', 'shortlisted', 'interview_scheduled', 'accepted'];
+        var activeIndex = activeStatuses.indexOf(application.status);
+        var timeline = activeStatuses
+          .map(function (status, index) {
+            return '<span class="' + (index <= activeIndex ? 'is-complete' : '') + '">' + escapeHtml(statusLabel(status)) + '</span>';
+          })
+          .join('');
         var detailsLink =
           application.internship_status === 'active' && application.approval_status === 'approved'
             ? '<a class="ig-button ig-button-secondary" href="../internship.html?id=' + encodeURIComponent(application.internship_id) + '">View Details</a>'
             : '<span class="ig-status-badge ig-status-neutral">Listing Closed</span>';
+        var withdrawButton =
+          ['submitted', 'viewed', 'shortlisted', 'interview_scheduled'].indexOf(application.status) !== -1
+            ? '<button class="ig-button ig-button-secondary" type="button" data-withdraw-id="' + application.id + '">Withdraw</button>'
+            : '';
 
         return [
           '<article class="student-application-card">',
@@ -77,8 +90,26 @@
           '    <div class="student-application-title-row"><h3>' + escapeHtml(application.title) + '</h3>' + badge(application.status) + '</div>',
           '    <p><i class="fa fa-building-o"></i> ' + escapeHtml(application.company_name) + '</p>',
           '    <div class="student-application-meta"><span><i class="fa fa-map-marker"></i> ' + escapeHtml(application.location) + '</span><span><i class="fa fa-briefcase"></i> ' + escapeHtml(application.type) + '</span><span><i class="fa fa-calendar-o"></i> Deadline: ' + escapeHtml(formatDate(application.deadline)) + '</span></div>',
+          '    <div class="application-timeline">' + timeline + '</div>',
           '  </div>',
-          '  <div class="student-application-action"><span>Applied ' + escapeHtml(formatDate(application.applied_at)) + '</span>' + detailsLink + '</div>',
+          '  <div class="student-application-action"><span>Applied ' + escapeHtml(formatDate(application.applied_at)) + '</span>' + detailsLink + withdrawButton + '</div>',
+          '</article>',
+        ].join('');
+      })
+      .join('');
+  }
+
+  function renderNotifications(items) {
+    if (!items.length) {
+      return '<div class="ig-empty-state"><h3>No notifications</h3><p>Application and university updates will appear here.</p></div>';
+    }
+
+    return items
+      .map(function (item) {
+        return [
+          '<article class="portal-notification-item' + (item.is_read ? '' : ' is-unread') + '">',
+          '<div><strong>' + escapeHtml(item.title) + '</strong><p>' + escapeHtml(item.message) + '</p><span>' + escapeHtml(formatDate(item.created_at)) + '</span></div>',
+          item.is_read ? '' : '<button class="ig-button ig-button-secondary" type="button" data-notification-id="' + item.id + '">Mark read</button>',
           '</article>',
         ].join('');
       })
@@ -206,6 +237,18 @@
 
     loadUpcomingDeadlines(api);
 
+    async function loadNotifications() {
+      var target = document.getElementById('student-notifications');
+      try {
+        var result = await api.listNotifications({ limit: 8 });
+        target.innerHTML = renderNotifications(result.notifications || []);
+      } catch (error) {
+        target.innerHTML = '<p>Notifications are unavailable.</p>';
+      }
+    }
+
+    loadNotifications();
+
     document.getElementById('student-logout-link').addEventListener('click', function (event) {
       event.preventDefault();
       api.clearSession();
@@ -236,5 +279,32 @@
       document.getElementById('student-recent-activity').innerHTML =
         '<div class="ig-empty-state"><span class="ig-empty-state-icon"><i class="fa fa-exclamation-circle"></i></span><h3>Activity unavailable</h3><p>Your latest activity could not be loaded. Please refresh and try again.</p></div>';
     }
+
+    document.getElementById('student-application-list').addEventListener('click', async function (event) {
+      var id = event.target.dataset.withdrawId;
+      if (!id || !window.confirm('Withdraw this application?')) {
+        return;
+      }
+
+      try {
+        await api.withdrawApplication(id);
+        window.location.reload();
+      } catch (error) {
+        setMessage(error.message || 'Unable to withdraw application.');
+      }
+    });
+
+    document.getElementById('student-notifications').addEventListener('click', async function (event) {
+      var id = event.target.dataset.notificationId;
+      if (id) {
+        await api.markNotificationRead(id);
+        await loadNotifications();
+      }
+    });
+
+    document.getElementById('student-read-notifications').addEventListener('click', async function () {
+      await api.markAllNotificationsRead();
+      await loadNotifications();
+    });
   });
 })();

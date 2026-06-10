@@ -26,7 +26,7 @@
           '  <td>' + api.escapeHtml(item.company_name) + '</td>',
           '  <td>' + api.escapeHtml(item.recruiter_name) + '</td>',
           '  <td>' + api.escapeHtml(item.email) + '</td>',
-          '  <td>' + api.escapeHtml(item.status) + '</td>',
+          '  <td><span class="admin-status admin-status-' + api.escapeHtml(item.status) + '">' + api.escapeHtml(item.status) + '</span></td>',
           '  <td>' + api.escapeHtml(api.formatDate(item.created_at)) + '</td>',
           '  <td><button class="admin-button admin-button-small" type="button" data-view-id="' + item.id + '">View</button></td>',
           '</tr>',

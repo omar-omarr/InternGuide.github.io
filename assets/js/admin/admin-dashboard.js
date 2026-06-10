@@ -36,6 +36,25 @@
       .join('');
   }
 
+  function renderNotifications(items) {
+    var api = window.InternGuideAdmin;
+
+    if (!items.length) {
+      return '<div class="admin-empty-state">No notifications.</div>';
+    }
+
+    return items
+      .map(function (item) {
+        return [
+          '<article class="admin-notification-item' + (item.is_read ? '' : ' is-unread') + '">',
+          '<div><strong>' + api.escapeHtml(item.title) + '</strong><p>' + api.escapeHtml(item.message) + '</p><span>' + api.escapeHtml(api.formatDate(item.created_at)) + '</span></div>',
+          item.is_read ? '' : '<button class="admin-button admin-button-small admin-button-secondary" type="button" data-notification-id="' + item.id + '">Mark read</button>',
+          '</article>',
+        ].join('');
+      })
+      .join('');
+  }
+
   document.addEventListener('DOMContentLoaded', async function () {
     var api = window.InternGuideAdmin;
 
@@ -62,9 +81,26 @@
     try {
       var result = await api.dashboard();
       cards.innerHTML = renderCards(result.summary || {});
+      var notifications = await api.listNotifications({ limit: 10 });
+      api.setHtml('admin-dashboard-notifications', renderNotifications(notifications.notifications || []));
     } catch (error) {
       api.setMessage('admin-dashboard-message', error.message || 'Unable to load dashboard.', 'error');
       cards.innerHTML = '<div class="admin-stat-card"><span>Dashboard</span><strong>Unavailable</strong></div>';
     }
+
+    api.on('admin-dashboard-notifications', 'click', async function (event) {
+      var id = event.target.dataset.notificationId;
+      if (id) {
+        await api.markNotificationRead(id);
+        var result = await api.listNotifications({ limit: 10 });
+        api.setHtml('admin-dashboard-notifications', renderNotifications(result.notifications || []));
+      }
+    });
+
+    api.on('admin-read-notifications', 'click', async function () {
+      await api.markAllNotificationsRead();
+      var result = await api.listNotifications({ limit: 10 });
+      api.setHtml('admin-dashboard-notifications', renderNotifications(result.notifications || []));
+    });
   });
 })();

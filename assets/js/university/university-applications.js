@@ -25,8 +25,8 @@
           '  <td>' + api.escapeHtml(item.student_email) + '</td>',
           '  <td>' + api.escapeHtml(item.internship_title) + '</td>',
           '  <td>' + api.escapeHtml(item.company_name) + '</td>',
-          '  <td>' + api.escapeHtml(item.application_status) + '</td>',
-          '  <td>' + api.escapeHtml(item.university_verification_status) + '</td>',
+          '  <td><span class="admin-status admin-status-' + api.escapeHtml(item.application_status) + '">' + api.escapeHtml(item.application_status.replace(/_/g, ' ')) + '</span></td>',
+          '  <td><span class="admin-status admin-status-' + api.escapeHtml(item.university_verification_status) + '">' + api.escapeHtml(item.university_verification_status) + '</span></td>',
           '  <td>' + api.escapeHtml(api.formatDate(item.created_at)) + '</td>',
           '</tr>',
         ].join('');

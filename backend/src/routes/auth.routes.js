@@ -6,6 +6,7 @@ const asyncHandler = require('../utils/asyncHandler');
 const { signAuthToken } = require('../utils/token');
 const validateRequest = require('../middleware/validate');
 const { removeUploadedFile, resumeUpload } = require('../middleware/upload');
+const { createNotification } = require('../services/notification.service');
 
 const router = express.Router();
 const saltRounds = 12;
@@ -30,7 +31,29 @@ function recruiterPayload(row) {
     companyName: row.company_name,
     recruiterName: row.recruiter_name,
     email: row.email,
+    verificationStatus: row.verification_status || 'pending',
   };
+}
+
+async function notifySystemAdmins(recruiter) {
+  const admins = await pool.query(
+    `SELECT id
+     FROM admin_users
+     WHERE role = 'system_admin'
+       AND status = 'active'`,
+  );
+
+  await Promise.all(
+    admins.rows.map((admin) =>
+      createNotification({
+        recipientRole: 'system_admin',
+        recipientId: admin.id,
+        title: 'Recruiter verification required',
+        message: `${recruiter.companyName} registered and is waiting for verification.`,
+        type: 'recruiter_verification_submitted',
+      }),
+    ),
+  );
 }
 
 const studentSignupValidators = [
@@ -159,8 +182,11 @@ router.post(
     const passwordHash = await bcrypt.hash(req.body.pass, saltRounds);
     const aboutCompany = req.body.about_company || req.body.message || null;
 
+    const client = await pool.connect();
+
     try {
-      const result = await pool.query(
+      await client.query('BEGIN');
+      const result = await client.query(
         `INSERT INTO recruiters
           (company_name, recruiter_name, email, password_hash, contact, address, country, city, about_company)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
@@ -178,18 +204,33 @@ router.post(
         ],
       );
 
-      const recruiter = recruiterPayload(result.rows[0]);
+      await client.query(
+        `INSERT INTO recruiter_verifications (recruiter_id, document_path, status)
+         VALUES ($1, 'account-registration', 'pending')`,
+        [result.rows[0].id],
+      );
+      await client.query('COMMIT');
+
+      const recruiter = recruiterPayload({ ...result.rows[0], verification_status: 'pending' });
+      await notifySystemAdmins(recruiter).catch((error) => {
+        console.error('Failed to notify system admins about recruiter signup:', error.message);
+      });
+
       return res.status(201).json({
-        message: 'Recruiter account created.',
+        message: 'Recruiter account created and submitted for admin verification.',
         token: signAuthToken({ id: recruiter.id, role: recruiter.role }),
         user: recruiter,
       });
     } catch (error) {
+      await client.query('ROLLBACK');
+
       if (error.code === '23505') {
         return duplicateEmailResponse(res);
       }
 
       throw error;
+    } finally {
+      client.release();
     }
   }),
 );
@@ -206,7 +247,21 @@ router.post(
     }
 
     const result = await pool.query(
-      'SELECT id, company_name, recruiter_name, email, password_hash FROM recruiters WHERE email = $1',
+      `SELECT
+        r.id,
+        r.company_name,
+        r.recruiter_name,
+        r.email,
+        r.password_hash,
+        COALESCE((
+          SELECT rv.status
+          FROM recruiter_verifications rv
+          WHERE rv.recruiter_id = r.id
+          ORDER BY rv.created_at DESC, rv.id DESC
+          LIMIT 1
+        ), 'pending') AS verification_status
+       FROM recruiters r
+       WHERE r.email = $1`,
       [email],
     );
     const recruiterRow = result.rows[0];

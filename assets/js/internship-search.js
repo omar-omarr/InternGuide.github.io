@@ -31,11 +31,15 @@
   function renderInternship(internship, index) {
     var image = images[index % images.length];
     var category = internship.category || 'General';
+    var verifiedCompany = internship.recruiter_verified
+      ? '<span class="ig-verified-company-badge"><i class="fa fa-shield"></i> Verified Company</span>'
+      : '';
 
     return [
       '<div class="single-job mb-4 d-lg-flex justify-content-between">',
       '  <div class="job-text">',
       '    <span class="ig-approved-badge"><i class="fa fa-check-circle"></i> University Approved</span>',
+      '    ' + verifiedCompany,
       '    <h4><a href="internship.html?id=' + encodeURIComponent(internship.id) + '">' + escapeHtml(internship.title) + '</a></h4>',
       '    <ul class="mt-4">',
       '      <li class="mb-3"><h5><i class="fa fa-map-marker"></i> ' + escapeHtml(internship.location) + '</h5></li>',
@@ -55,10 +59,15 @@
   }
 
   function renderHomeInternship(internship) {
+    var verifiedCompany = internship.recruiter_verified
+      ? '<span class="ig-verified-company-badge"><i class="fa fa-shield"></i> Verified Company</span>'
+      : '';
+
     return [
       '<article class="homepage-internship-card">',
       '  <div class="homepage-internship-card-top">',
       '    <span class="ig-approved-badge"><i class="fa fa-check-circle"></i> University Approved</span>',
+      '    ' + verifiedCompany,
       '    <span class="homepage-internship-location"><i class="fa fa-map-marker"></i> ' + escapeHtml(internship.location) + '</span>',
       '  </div>',
       '  <h3><a href="internship.html?id=' + encodeURIComponent(internship.id) + '">' + escapeHtml(internship.title) + '</a></h3>',

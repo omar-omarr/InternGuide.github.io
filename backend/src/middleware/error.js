@@ -24,7 +24,7 @@ function errorHandler(err, req, res, next) {
     return sendError(res, 400, message);
   }
 
-  if (err.message === 'Resume must be a PDF, DOC, or DOCX file.') {
+  if (err.message === 'Resume must be a PDF file.') {
     return sendError(res, 400, err.message);
   }
 
