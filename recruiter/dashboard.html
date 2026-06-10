@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recruiter Dashboard | InternGuide</title>
+  <link rel="shortcut icon" href="../assets/images/logo/icon.png" type="image/x-icon">
+  <link rel="stylesheet" href="../assets/css/font-awesome-4.7.0.min.css">
+  <link rel="stylesheet" href="../assets/css/style.css?v=final-demo-features-1">
+</head>
+<body class="portal-page">
+  <header class="ig-header portal-site-header">
+    <div class="ig-container ig-header-inner">
+      <a class="ig-logo ig-logo-intern-guide" href="../index.html"><img src="../assets/images/int.png" alt="InternGuide logo"></a>
+      <button class="ig-menu-toggle" type="button" aria-controls="portal-nav" aria-expanded="false" data-ig-menu-toggle><i class="fa fa-bars"></i></button>
+      <ul class="ig-nav portal-nav" id="portal-nav">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../internship-search.html">Public Internships</a></li>
+        <li><a href="#" id="logout-link">Logout</a></li>
+        <li><a href="#" aria-haspopup="true" aria-expanded="false">Sign In <i class="fa fa-angle-down"></i></a><ul class="ig-subnav"><li><a href="../userlogin.html">Student Login</a></li><li><a href="../recruiter_login.html">Recruiter Login</a></li><li><a href="../university/login.html">University Admin Login</a></li><li><a href="../admin/login.html">System Admin Login</a></li></ul></li>
+        <li><a class="ig-nav-cta" href="#" aria-haspopup="true" aria-expanded="false">Sign Up <i class="fa fa-angle-down"></i></a><ul class="ig-subnav ig-subnav-end"><li><a href="../user_signup.html">Student Sign Up</a></li><li><a href="../recruiter_signup.html">Recruiter Sign Up</a></li></ul></li>
+      </ul>
+    </div>
+  </header>
+  <main class="ig-container portal-main">
+    <div class="portal-heading"><span class="ig-eyebrow">Recruiter Workspace</span><h1>Internship dashboard</h1><p>Post opportunities, manage active listings, and review student applicants.</p></div>
+    <div id="dashboard-message" class="portal-message"></div>
+
+    <section class="portal-stat-grid" aria-label="Recruiter dashboard statistics">
+      <article class="portal-stat-card"><span class="portal-stat-icon"><i class="fa fa-briefcase"></i></span><div><strong id="recruiter-posted-count">0</strong><span>Posted Internships</span></div></article>
+      <article class="portal-stat-card"><span class="portal-stat-icon"><i class="fa fa-play-circle-o"></i></span><div><strong id="recruiter-active-count">0</strong><span>Active Internships</span></div></article>
+      <article class="portal-stat-card"><span class="portal-stat-icon"><i class="fa fa-users"></i></span><div><strong id="recruiter-applicant-count">0</strong><span>Total Applicants</span></div></article>
+      <article class="portal-stat-card"><span class="portal-stat-icon"><i class="fa fa-clock-o"></i></span><div><strong id="recruiter-pending-count">0</strong><span>Pending University Approvals</span></div></article>
+      <article class="portal-stat-card"><span class="portal-stat-icon"><i class="fa fa-check-circle-o"></i></span><div><strong id="recruiter-approved-count">0</strong><span>Approved Internships</span></div></article>
+    </section>
+
+    <section class="portal-card">
+      <div class="portal-card-header"><div><h2>Post or edit an internship</h2><p>New internships enter the university approval workflow before appearing publicly.</p></div><span class="portal-status">University approval required</span></div>
+      <form id="internship-form">
+        <input type="hidden" name="internship_id">
+        <div class="ig-form-grid">
+          <div class="ig-field"><label for="title">Internship title</label><input id="title" name="title" type="text" placeholder="e.g. Software Engineering Intern" required></div>
+          <div class="ig-field"><label for="company_name">Company name</label><input id="company_name" name="company_name" type="text" placeholder="Optional override"></div>
+          <div class="ig-field"><label for="location">Location</label><input id="location" name="location" type="text" placeholder="City or Remote" required></div>
+          <div class="ig-field"><label for="category">Category</label><input id="category" name="category" type="text" placeholder="Software, Marketing, Finance"></div>
+          <div class="ig-field"><label for="type">Type</label><select id="type" name="type" required><option value="Full Time">Full Time</option><option value="Part Time">Part Time</option><option value="Remote">Remote</option><option value="Office Internship">Office Internship</option></select></div>
+          <div class="ig-field"><label for="deadline">Application deadline</label><input id="deadline" name="deadline" type="date"></div>
+          <div class="ig-field"><label for="status">Listing status</label><select id="status" name="status"><option value="active">active</option><option value="closed">closed</option></select></div>
+          <div class="ig-field"><label for="stipend">Stipend</label><input id="stipend" name="stipend" type="text" placeholder="Paid, unpaid, or monthly amount"></div>
+          <div class="ig-field ig-field-full"><label for="description">Description</label><textarea id="description" name="description" placeholder="Describe the internship responsibilities and experience" required></textarea></div>
+          <div class="ig-field ig-field-full"><label for="requirements">Requirements</label><textarea id="requirements" name="requirements" placeholder="List skills, education, or availability requirements"></textarea></div>
+        </div>
+        <div class="ig-form-actions"><button class="template-btn" type="submit">Post Internship</button><button class="template-btn secondary" type="button" id="cancel-edit">Cancel Edit</button></div>
+      </form>
+    </section>
+
+    <section class="portal-card" id="my-internships">
+      <div class="portal-card-header"><div><h2>Your internships</h2><p>Manage listings and open each opportunity's applicant list.</p></div></div>
+      <div class="portal-table-wrap">
+        <table class="portal-table">
+          <thead><tr><th>Title</th><th>Location</th><th>Type</th><th>Deadline</th><th>Listing</th><th>University Approval</th><th>Applicants</th><th>Actions</th></tr></thead>
+          <tbody id="internship-table-body"><tr><td colspan="8">Loading internships...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/recruiter-dashboard.js"></script>
+  <script src="../assets/js/professional-ui.js"></script>
+</body>
+</html>

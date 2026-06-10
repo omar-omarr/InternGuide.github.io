@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Internship Details | InternGuide</title>
+  <link rel="shortcut icon" href="assets/images/logo/icon.png" type="image/x-icon">
+  <link rel="stylesheet" href="assets/css/font-awesome-4.7.0.min.css">
+  <link rel="stylesheet" href="assets/css/style.css?v=final-demo-features-1">
+</head>
+<body class="public-page professional-page">
+  <header class="ig-header">
+    <div class="ig-container ig-header-inner">
+      <a class="ig-logo ig-logo-intern-guide" href="index.html"><img src="assets/images/int.png" alt="InternGuide logo"></a>
+      <button class="ig-menu-toggle" type="button" aria-controls="public-nav" aria-expanded="false" data-ig-menu-toggle><i class="fa fa-bars"></i></button>
+      <ul class="ig-nav" id="public-nav">
+        <li><a href="index.html">Home</a></li><li><a href="about.html">About Us</a></li><li><a class="active" href="internship-search.html">Find Internship</a></li><li><a href="contact-us.html">Contact</a></li><li><a href="resume-search.html">Find Candidates</a></li>
+        <li><a href="#" aria-haspopup="true" aria-expanded="false">Sign In <i class="fa fa-angle-down"></i></a><ul class="ig-subnav"><li><a href="userlogin.html">Student Login</a></li><li><a href="recruiter_login.html">Recruiter Login</a></li><li><a href="university/login.html">University Admin Login</a></li><li><a href="admin/login.html">System Admin Login</a></li></ul></li>
+        <li><a class="ig-nav-cta" href="#" aria-haspopup="true" aria-expanded="false">Sign Up <i class="fa fa-angle-down"></i></a><ul class="ig-subnav ig-subnav-end"><li><a href="user_signup.html">Student Sign Up</a></li><li><a href="recruiter_signup.html">Recruiter Sign Up</a></li></ul></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <section class="ig-page-hero">
+      <div class="ig-container ig-page-hero-content"><span class="ig-eyebrow">Internship Details</span><h1>Review the opportunity and apply</h1><p>Learn about the role, company, requirements, and deadline before submitting your application.</p></div>
+    </section>
+    <section class="ig-section">
+      <div class="ig-container ig-detail-layout">
+        <div id="internship-details"><div class="single-job">Loading internship details...</div></div>
+        <aside class="ig-form-card">
+          <div class="ig-section-heading"><span class="ig-eyebrow">Student Application</span><h2 style="font-size:26px">Apply for this internship</h2><p>Sign in as a student, add a short introduction, and upload your resume.</p></div>
+          <form id="application-form" enctype="multipart/form-data">
+            <div class="ig-field"><label for="cover_letter">Cover letter</label><textarea id="cover_letter" name="cover_letter" placeholder="Briefly introduce yourself"></textarea></div>
+            <div class="ig-field" style="margin-top:16px"><label for="resume">Resume</label><input id="resume" name="resume" type="file" accept=".pdf,.doc,.docx" required></div>
+            <div id="apply-message" class="ig-message"></div>
+            <button class="ig-button" type="submit">Submit Application</button>
+          </form>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="ig-footer"><div class="ig-container"><div class="ig-footer-grid"><div><h3>InternGuide</h3><p>A secure internship management platform connecting students, recruiters, and universities.</p></div><div><h3>Quick Links</h3><ul><li><a href="internship-search.html">All Internships</a></li><li><a href="about.html">About</a></li><li><a href="contact-us.html">Contact Us</a></li></ul></div><div><h3>Student Access</h3><ul><li><a href="userlogin.html">Student Login</a></li><li><a href="user_signup.html">Create Account</a></li></ul></div></div><div class="ig-footer-bottom"><p>&copy; 2026 InternGuide. All rights reserved.</p></div></div></footer>
+  <script src="assets/js/professional-ui.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/internship-detail.js"></script>
+</body>
+</html>

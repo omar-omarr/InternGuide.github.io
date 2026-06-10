@@ -41,18 +41,20 @@
         $('select').niceSelect();
 
         // Range Slider
-        $("#range").ionRangeSlider({
-            hide_min_max: true,
-            keyboard: true,
-            min: 5000,
-            max: 100000,
-            from: 6000,
-            to: 90000,
-            type: 'double',
-            step: 1,
-            prefix: "₹",
-            grid: true
-        });
+        if ($('#range').length && $.fn.ionRangeSlider) {
+            $("#range").ionRangeSlider({
+                hide_min_max: true,
+                keyboard: true,
+                min: 5000,
+                max: 100000,
+                from: 6000,
+                to: 90000,
+                type: 'double',
+                step: 1,
+                prefix: "₹",
+                grid: true
+            });
+        }
 
         // Google Map
         if ( $('#mapBox').length ){

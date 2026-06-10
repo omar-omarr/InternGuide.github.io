@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>University Profile | InternGuide</title>
+  <link rel="shortcut icon" href="assets/images/logo/icon.png" type="image/x-icon">
+  <link rel="stylesheet" href="assets/css/font-awesome-4.7.0.min.css">
+  <link rel="stylesheet" href="assets/css/style.css?v=final-demo-features-1">
+</head>
+<body class="portal-page">
+  <header class="ig-header portal-site-header">
+    <div class="ig-container ig-header-inner">
+      <a class="ig-logo ig-logo-intern-guide" href="index.html"><img src="assets/images/int.png" alt="InternGuide logo"></a>
+      <button class="ig-menu-toggle" type="button" aria-controls="portal-nav" aria-expanded="false" data-ig-menu-toggle><i class="fa fa-bars"></i></button>
+      <ul class="ig-nav portal-nav" id="portal-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="student/dashboard.html">Student Dashboard</a></li>
+        <li><a href="internship-search.html">Browse Internships</a></li>
+        <li><a href="#" aria-haspopup="true" aria-expanded="false">Sign In <i class="fa fa-angle-down"></i></a><ul class="ig-subnav"><li><a href="userlogin.html">Student Login</a></li><li><a href="recruiter_login.html">Recruiter Login</a></li><li><a href="university/login.html">University Admin Login</a></li><li><a href="admin/login.html">System Admin Login</a></li></ul></li>
+        <li><a class="ig-nav-cta" href="#" aria-haspopup="true" aria-expanded="false">Sign Up <i class="fa fa-angle-down"></i></a><ul class="ig-subnav ig-subnav-end"><li><a href="user_signup.html">Student Sign Up</a></li><li><a href="recruiter_signup.html">Recruiter Sign Up</a></li></ul></li>
+      </ul>
+    </div>
+  </header>
+  <main class="ig-container portal-main">
+    <div class="portal-heading"><span class="ig-eyebrow">Student Profile</span><h1>University verification</h1><p>Connect your InternGuide student account with your university and department.</p></div>
+    <div id="student-university-message" class="portal-message" role="alert"></div>
+    <section class="portal-card" style="max-width:780px">
+      <div class="portal-card-header"><div><h2>University details</h2><p>Submit accurate information for university review.</p></div><span id="student-university-status" class="portal-status">Loading status...</span></div>
+      <form id="student-university-form">
+        <div class="ig-form-grid">
+          <div class="ig-field"><label for="student-university-id">University</label><select id="student-university-id" name="university_id" required><option value="">Loading universities...</option></select></div>
+          <div class="ig-field"><label for="student-department-id">Department</label><select id="student-department-id" name="department_id"><option value="">Select a university first</option></select></div>
+          <div class="ig-field ig-field-full"><label for="student-number">Student number</label><input id="student-number" name="student_number" type="text" placeholder="Enter your official student number" required></div>
+        </div>
+        <div class="ig-form-actions"><button class="ig-button" type="submit">Save University Profile</button><a class="ig-button ig-button-secondary" href="internship-search.html">Back to Internships</a></div>
+      </form>
+    </section>
+  </main>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/student-university.js"></script>
+  <script src="assets/js/professional-ui.js"></script>
+</body>
+</html>

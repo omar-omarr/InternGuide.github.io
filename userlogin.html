@@ -1,120 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<title>User Login</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--===============================================================================================-->
-	<link rel="icon" type="image/png" href="Login/images/icons/favicon.ico" />
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="Login/vendor/bootstrap/css/bootstrap.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="Login/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="Login/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="Login/vendor/animate/animate.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="Login/vendor/css-hamburgers/hamburgers.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="Login/vendor/animsition/css/animsition.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="Login/vendor/select2/select2.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="Login/vendor/daterangepicker/daterangepicker.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="Login/css/util.css">
-	<link rel="stylesheet" type="text/css" href="Login/css/main.css">
-	<!--===============================================================================================-->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Login | InternGuide</title>
+  <link rel="shortcut icon" href="assets/images/logo/icon.png" type="image/x-icon">
+  <link rel="stylesheet" href="assets/css/font-awesome-4.7.0.min.css">
+  <link rel="stylesheet" href="assets/css/style.css?v=remaining-ui-1">
 </head>
-
-<body>
-
-	<div class="limiter">
-		<div class="container-login100" style="background-image: url('Login/images/bg-01.jpg');">
-			<div class="wrap-login100 p-l-50 p-r-50 p-t-10 p-b-10">
-				<form class="login100-form validate-form flex-sb flex-w" action=index.html>
-					<span class="login100-form-title p-b-53">
-						User Login
-					</span>
-
-					<a href="https://www.linkedin.com" class="btn-face m-b-20" target="_blank">
-						<i class="fa fa-linkedin-square" aria-hidden="true"></i>
-						LinkedIn
-					</a>
-					
-
-					<a href="https://accounts.google.com" class="btn-google m-b-20" target="_blank">
-						Google
-					</a>
-
-					<div class="p-t-31 p-b-9">
-						<span class="txt1">
-							Username
-						</span>
-					</div>
-					<div class="wrap-input100 validate-input" data-validate="Username is required">
-						<input class="input100" type="text" name="username">
-						<span class="focus-input100"></span>
-					</div>
-
-					<div class="p-t-13 p-b-9">
-						<span class="txt1">
-							Password
-						</span>
-
-						<a href="#" class="txt2 bo1 m-l-5">
-							Forgot?
-						</a>
-					</div>
-					<div class="wrap-input100 validate-input" data-validate="Password is required">
-						<input class="input100" type="password" name="pass">
-						<span class="focus-input100"></span>
-					</div>
-
-					<div class="container-login100-form-btn m-t-17">
-
-						<button class="login100-form-btn">
-							Login
-						</button>
-
-					</div>
-
-					<div class="w-full text-center p-t-55">
-						<span class="txt2">
-							Not a member?
-						</span>
-
-						<a href="user_signup.html" class="txt2 bo1">
-							Sign up now
-						</a>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-
-
-	<div id="dropDownSelect1"></div>
-
-	<!--===============================================================================================-->
-	<script src="Login/vendor/jquery/jquery-3.2.1.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="Login/vendor/animsition/js/animsition.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="Login/vendor/bootstrap/js/popper.js"></script>
-	<script src="Login/vendor/bootstrap/js/bootstrap.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="Login/vendor/select2/select2.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="Login/vendor/daterangepicker/moment.min.js"></script>
-	<script src="Login/vendor/daterangepicker/daterangepicker.js"></script>
-	<!--===============================================================================================-->
-	<script src="Login/vendor/countdowntime/countdowntime.js"></script>
-	<!--===============================================================================================-->
-	<script src="Login/js/main.js"></script>
-
+<body class="auth-modern-page">
+  <header class="ig-header auth-site-header">
+    <div class="ig-container ig-header-inner">
+      <a class="ig-logo ig-logo-intern-guide" href="index.html"><img src="assets/images/int.png" alt="InternGuide logo"></a>
+      <button class="ig-menu-toggle" type="button" aria-controls="public-nav" aria-expanded="false" data-ig-menu-toggle><i class="fa fa-bars"></i></button>
+      <ul class="ig-nav" id="public-nav">
+        <li><a href="index.html">Home</a></li><li><a href="about.html">About Us</a></li><li><a href="internship-search.html">Find Internship</a></li><li><a href="contact-us.html">Contact</a></li><li><a href="resume-search.html">Find Candidates</a></li>
+        <li><a class="active" href="#" aria-haspopup="true" aria-expanded="false">Sign In <i class="fa fa-angle-down"></i></a><ul class="ig-subnav"><li><a href="userlogin.html">Student Login</a></li><li><a href="recruiter_login.html">Recruiter Login</a></li><li><a href="university/login.html">University Admin Login</a></li><li><a href="admin/login.html">System Admin Login</a></li></ul></li>
+        <li><a class="ig-nav-cta" href="#" aria-haspopup="true" aria-expanded="false">Sign Up <i class="fa fa-angle-down"></i></a><ul class="ig-subnav ig-subnav-end"><li><a href="user_signup.html">Student Sign Up</a></li><li><a href="recruiter_signup.html">Recruiter Sign Up</a></li></ul></li>
+      </ul>
+    </div>
+  </header>
+  <main class="auth-modern-shell">
+    <section class="auth-modern-brand">
+      <a href="index.html"><img src="assets/images/int.png" alt="InternGuide logo"></a>
+      <div><h2>Your internship journey, organized.</h2><p>Sign in to find approved opportunities, submit applications, and manage your university profile.</p></div>
+      <a class="auth-back-link" href="index.html">&larr; Back to InternGuide</a>
+    </section>
+    <section class="auth-modern-card">
+      <span class="ig-eyebrow">Student Access</span>
+      <h1>Welcome back</h1>
+      <p>Enter your student account details to continue.</p>
+      <form id="student-login-form" class="auth-modern-form">
+        <div><label for="student-login-email">Email address</label><input id="student-login-email" name="username" type="email" placeholder="you@example.com" autocomplete="email" required></div>
+        <div><label for="student-login-password">Password</label><input id="student-login-password" name="pass" type="password" placeholder="Enter your password" autocomplete="current-password" required></div>
+        <div class="ig-message" data-form-message="student-login-form"></div>
+        <button class="template-btn" type="submit">Student Login</button>
+      </form>
+      <div class="auth-modern-links">New to InternGuide? <a href="user_signup.html">Create a student account</a><br><br>Recruiting students? <a href="recruiter_login.html">Recruiter login</a></div>
+    </section>
+  </main>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth-pages.js"></script>
+  <script src="assets/js/professional-ui.js"></script>
 </body>
-
 </html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>System Admin Login</title>
+
+  <link rel="shortcut icon" href="../assets/images/logo/icon.png" type="image/x-icon">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+
+<body class="admin-login-page">
+  <main class="admin-login-shell" aria-labelledby="admin-login-title">
+    <section class="admin-login-card">
+      <a class="admin-login-brand" href="../index.html">
+        <img src="../assets/images/logo/icon.png" alt="InternGuide">
+        <div>
+          <strong>InternGuide</strong>
+          <small>System administration</small>
+        </div>
+      </a>
+
+      <span class="admin-kicker">System Admin</span>
+      <h1 id="admin-login-title">Login</h1>
+      <p>Sign in with your system admin account.</p>
+
+      <div id="admin-login-message" class="admin-message" role="alert"></div>
+
+      <form id="admin-login-form">
+        <div class="admin-field">
+          <label for="admin-email">Email</label>
+          <input id="admin-email" name="email" type="email" class="admin-input" required>
+        </div>
+        <div class="admin-field">
+          <label for="admin-password">Password</label>
+          <input id="admin-password" name="password" type="password" class="admin-input" required>
+        </div>
+        <button type="submit" class="admin-button">Login</button>
+      </form>
+
+      <div class="admin-login-footer">
+        <a href="../index.html">Back to public site</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/admin/admin-api.js"></script>
+  <script src="../assets/js/admin/admin-login.js"></script>
+</body>
+
+</html>

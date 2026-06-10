@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>University Admin Login</title>
+
+  <link rel="shortcut icon" href="../assets/images/logo/icon.png" type="image/x-icon">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+
+<body class="admin-login-page">
+  <main class="admin-login-shell" aria-labelledby="university-login-title">
+    <section class="admin-login-card">
+      <a class="admin-login-brand" href="../index.html">
+        <img src="../assets/images/logo/icon.png" alt="InternGuide">
+        <div>
+          <strong>InternGuide</strong>
+          <small>University administration</small>
+        </div>
+      </a>
+
+      <span class="admin-kicker">University Admin</span>
+      <h1 id="university-login-title">Login</h1>
+      <p>Sign in with your university admin account.</p>
+
+      <div id="university-login-message" class="admin-message" role="alert"></div>
+
+      <form id="university-login-form">
+        <div class="admin-field">
+          <label for="university-email">Email</label>
+          <input id="university-email" name="email" type="email" class="admin-input" required>
+        </div>
+        <div class="admin-field">
+          <label for="university-password">Password</label>
+          <input id="university-password" name="password" type="password" class="admin-input" required>
+        </div>
+        <button type="submit" class="admin-button">Login</button>
+      </form>
+
+      <div class="admin-login-footer">
+        <a href="../index.html">Back to public site</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/university/university-api.js"></script>
+  <script src="../assets/js/university/university-login.js"></script>
+</body>
+
+</html>

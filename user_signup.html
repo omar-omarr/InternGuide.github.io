@@ -1,159 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <!-- Required meta tags-->
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="internguide">
-  <meta name="author" content="internguide">
-  <meta name="keywords" content="internguide">
-
-  <!-- Title Page-->
-  <title>Signup</title>
-
-  <!-- Font special for pages-->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
-
-  <!-- Main CSS-->
-  <link href="signup/css/main.css" rel="stylesheet" media="all">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Sign Up | InternGuide</title>
+  <link rel="shortcut icon" href="assets/images/logo/icon.png" type="image/x-icon">
+  <link rel="stylesheet" href="assets/css/font-awesome-4.7.0.min.css">
+  <link rel="stylesheet" href="assets/css/style.css?v=remaining-ui-1">
 </head>
-
-<body>
-  <div class="page-wrapper bg-dark p-t-100 p-b-50">
-    <div class="wrapper wrapper--w900">
-      <div class="card card-6">
-        <div class="card-heading">
-          <h2 class="title">User Signup</h2>
-        </div>
-        <div class="card-body">
-          <form method="POST">
-
-
-
-
-            <!--email-->
-            <div class="form-row">
-              <div class="name">Email address</div>
-              <div class="value">
-                <div class="input-group">
-                  <input class="input--style-6" type="email" name="email" placeholder="example@student.bau.edu.lb" required>
-                </div>
-              </div>
-            </div>
-
-            <!--Password-->
-            <div class="form-row">
-              <div class="name">Password</div>
-              <div class="value">
-                <div class="input-group">
-                  <input class="input--style-6" type="password" name="pass" id="password" placeholder="">
-                </div>
-              </div>
-            </div>
-
-            <!--Confirm Password-->
-            <div class="form-row">
-              <div class="name">Re Type Password</div>
-              <div class="value">
-                <div class="input-group">
-                  <input class="input--style-6" type="password" name="repass" id="confirm_password" onkeyup="validatePassword();" placeholder="">
-                </div>
-              </div>
-            </div>
-
-            <!--name-->
-            <div class="form-row">
-              <div class="name">Full name</div>
-              <div class="value">
-                <input class="input--style-6" type="text" name="full_name">
-              </div>
-            </div>
-
-            <!--DOB-->
-            <div class="form-row">
-              <div class="name">Date Of Birth</div>
-              <div class="value">
-                <input class="input--style-6" type="date" name="dob">
-              </div>
-            </div>
-
-            <!--gender-->
-            <div class="form-row">
-              <div class="name col-lg-2">Gender</div>
-              <div class="default-select" id="default-select">
-
-                <select class="col-lg-10">
-                  <option value="1">Male</option>
-                  <option value="1">Female</option>
-                </select>
-              </div>
-            </div>
-
-
-            <div class="form-row">
-              <div class="name">University information</div>
-              <div>
-                <div class=" form-row">
-                  <div class="value">
-                    <input class="input--style-6" type="text" name="Major" placeholder="Major">
-                    <input class="input--style-6" type="number" name="year" placeholder="Year">
-                  </div>
-                </div>
-            </div>
-            </div>
-
-            <!--Current Address-->
-            <div class="form-row">
-              <div class="name">Current Address</div>
-              <div class="value">
-                <div class="input-group">
-                  <textarea class="textarea--style-6" name="address" placeholder="Enter your Address"></textarea>
-                </div>
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="name">Upload CV</div>
-              <div class="value">
-                <div class="input-group js-input-file">
-                  <input class="input-file" type="file" name="file_cv" id="file">
-                  <label class="label--file" for="file">Choose file</label>
-                  <span class="input-file__info">No file chosen</span>
-                </div>
-                <div class="label--desc">Upload your CV/Resume or any other relevant file. Max file size 50 MB</div>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="card-footer">
-          <button class="btn btn--radius-2 btn--blue-2" type="submit">Send Application</button>
-        </div>
-      </div>
+<body class="auth-modern-page">
+  <header class="ig-header auth-site-header">
+    <div class="ig-container ig-header-inner">
+      <a class="ig-logo ig-logo-intern-guide" href="index.html"><img src="assets/images/int.png" alt="InternGuide logo"></a>
+      <button class="ig-menu-toggle" type="button" aria-controls="public-nav" aria-expanded="false" data-ig-menu-toggle><i class="fa fa-bars"></i></button>
+      <ul class="ig-nav" id="public-nav">
+        <li><a href="index.html">Home</a></li><li><a href="about.html">About Us</a></li><li><a href="internship-search.html">Find Internship</a></li><li><a href="contact-us.html">Contact</a></li><li><a href="resume-search.html">Find Candidates</a></li>
+        <li><a href="#" aria-haspopup="true" aria-expanded="false">Sign In <i class="fa fa-angle-down"></i></a><ul class="ig-subnav"><li><a href="userlogin.html">Student Login</a></li><li><a href="recruiter_login.html">Recruiter Login</a></li><li><a href="university/login.html">University Admin Login</a></li><li><a href="admin/login.html">System Admin Login</a></li></ul></li>
+        <li><a class="ig-nav-cta active" href="#" aria-haspopup="true" aria-expanded="false">Sign Up <i class="fa fa-angle-down"></i></a><ul class="ig-subnav ig-subnav-end"><li><a href="user_signup.html">Student Sign Up</a></li><li><a href="recruiter_signup.html">Recruiter Sign Up</a></li></ul></li>
+      </ul>
     </div>
-  </div>
-
-  <!-- Jquery JS-->
-  <script src="signup/vendor/jquery/jquery.min.js"></script>
-
-  <!--confirm password-->
-  <script>
-    var password = document.getElementById("password"),
-      confirm_password = document.getElementById("confirm_password");
-
-    function validatePassword() {
-      if (password.value != confirm_password.value) {
-        confirm_password.setCustomValidity("Passwords Don't Match");
-      } else {
-        confirm_password.setCustomValidity('');
-      }
-    }
-  </script>
-
-  <!-- Main JS-->
-  <script src="signup/js/global.js"></script>
-
+  </header>
+  <main class="auth-modern-shell">
+    <section class="auth-modern-brand">
+      <a href="index.html"><img src="assets/images/int.png" alt="InternGuide logo"></a>
+      <div><h2>Start building your career experience.</h2><p>Create a student account to browse approved internships and submit applications with your resume.</p></div>
+      <a class="auth-back-link" href="index.html">&larr; Back to InternGuide</a>
+    </section>
+    <section class="auth-modern-card">
+      <span class="ig-eyebrow">Student Registration</span>
+      <h1>Create your account</h1>
+      <p>Tell us a little about yourself to get started.</p>
+      <form id="student-signup-form" class="auth-modern-form" enctype="multipart/form-data">
+        <div class="ig-form-grid">
+          <div class="ig-field ig-field-full"><label for="student-full-name">Full name</label><input id="student-full-name" name="full_name" type="text" placeholder="Your full name" required></div>
+          <div class="ig-field"><label for="student-email">Email address</label><input id="student-email" name="email" type="email" placeholder="you@example.com" required></div>
+          <div class="ig-field"><label for="student-dob">Date of birth</label><input id="student-dob" name="dob" type="date"></div>
+          <div class="ig-field"><label for="student-password">Password</label><input id="student-password" name="pass" type="password" minlength="8" placeholder="At least 8 characters" required></div>
+          <div class="ig-field"><label for="student-repassword">Confirm password</label><input id="student-repassword" name="repass" type="password" minlength="8" placeholder="Repeat your password" required></div>
+          <div class="ig-field"><label for="student-gender">Gender</label><select id="student-gender" name="gender"><option value="">Select gender</option><option value="Male">Male</option><option value="Female">Female</option></select></div>
+          <div class="ig-field"><label for="student-major">Major</label><input id="student-major" name="major" type="text" placeholder="e.g. Computer Science"></div>
+          <div class="ig-field"><label for="student-year">Academic year</label><input id="student-year" name="year" type="number" min="1" max="10" placeholder="e.g. 3"></div>
+          <div class="ig-field"><label for="student-resume">Resume (optional)</label><input id="student-resume" name="file_cv" type="file" accept=".pdf,.doc,.docx"></div>
+          <div class="ig-field ig-field-full"><label for="student-address">Address</label><input id="student-address" name="address" type="text" placeholder="Your city or address"></div>
+        </div>
+        <div class="ig-message" data-form-message="student-signup-form"></div>
+        <button class="template-btn" type="submit">Create Student Account</button>
+      </form>
+      <div class="auth-modern-links">Already have an account? <a href="userlogin.html">Student login</a></div>
+    </section>
+  </main>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth-pages.js"></script>
+  <script src="assets/js/professional-ui.js"></script>
 </body>
-
 </html>
-<!-- end document-->

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Manage Universities</title>
+
+  <link rel="shortcut icon" href="../assets/images/logo/icon.png" type="image/x-icon">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+
+<body class="admin-page">
+  <div class="admin-shell">
+    <aside class="admin-sidebar" aria-label="System admin navigation">
+      <a class="admin-brand" href="dashboard.html">
+        <img src="../assets/images/logo/icon.png" alt="InternGuide">
+        <div>
+          <span>InternGuide</span>
+          <small>System Admin</small>
+        </div>
+      </a>
+
+      <nav class="admin-nav">
+        <a href="dashboard.html">Dashboard</a>
+        <a class="active" href="universities.html">Universities</a>
+        <a href="recruiter-verifications.html">Verifications</a>
+        <a href="internships.html">Internships</a>
+        <a href="users.html">Users</a>
+        <a href="audit-logs.html">Audit Logs</a>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <a href="../index.html">Public site</a>
+        <a href="#" id="admin-logout-link">Logout</a>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <div>
+          <span class="admin-kicker">System Admin</span>
+          <h1>Universities</h1>
+        </div>
+        <a class="admin-home-link" href="../index.html">Public site</a>
+      </header>
+
+      <div class="admin-content">
+        <div id="admin-universities-message" class="admin-message" role="alert"></div>
+
+        <section class="admin-panel">
+          <h2>University details</h2>
+          <form id="admin-university-form">
+            <input type="hidden" name="id">
+            <div class="admin-form-grid">
+              <div class="admin-field">
+                <label for="university-name">Name</label>
+                <input id="university-name" name="name" type="text" class="admin-input" required>
+              </div>
+              <div class="admin-field">
+                <label for="university-domain">Email domain</label>
+                <input id="university-domain" name="email_domain" type="text" class="admin-input" placeholder="example.edu">
+              </div>
+              <div class="admin-field">
+                <label for="university-location">Location</label>
+                <input id="university-location" name="location" type="text" class="admin-input">
+              </div>
+              <div class="admin-field">
+                <label for="university-contact">Contact email</label>
+                <input id="university-contact" name="contact_email" type="email" class="admin-input">
+              </div>
+              <div class="admin-field admin-field-small">
+                <label for="university-status">Status</label>
+                <select id="university-status" name="status" class="admin-input">
+                  <option value="active">active</option>
+                  <option value="inactive">inactive</option>
+                </select>
+              </div>
+            </div>
+            <div class="admin-form-actions">
+              <button type="submit" class="admin-button">Save</button>
+              <button type="button" id="admin-university-cancel" class="admin-button admin-button-secondary">Cancel</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="admin-panel">
+          <div class="admin-panel-header">
+            <h2>Universities</h2>
+            <form id="admin-university-search-form" class="admin-filter-form">
+              <div class="admin-field">
+                <label for="university-search">Search</label>
+                <input id="university-search" name="q" type="search" class="admin-input" placeholder="Name, domain, or location">
+              </div>
+              <button type="submit" class="admin-button">Search</button>
+            </form>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Domain</th>
+                  <th>Location</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-universities-table">
+                <tr><td colspan="5">Loading universities...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="admin-panel">
+          <h2 id="admin-departments-title">Departments</h2>
+          <form id="admin-department-form">
+            <input type="hidden" name="university_id">
+            <input type="hidden" name="id">
+            <div class="admin-form-grid">
+              <div class="admin-field">
+                <label for="department-name">Department name</label>
+                <input id="department-name" name="name" type="text" class="admin-input" required>
+              </div>
+            </div>
+            <div class="admin-form-actions">
+              <button type="submit" class="admin-button">Save Department</button>
+            </div>
+          </form>
+
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-departments-table">
+                <tr><td colspan="3">Select a university to manage departments.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/admin/admin-api.js"></script>
+  <script src="../assets/js/admin/admin-universities.js"></script>
+</body>
+
+</html>

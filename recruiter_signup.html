@@ -1,163 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <!-- Required meta tags-->
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="internguide">
-  <meta name="author" content="internguide">
-  <meta name="keywords" content="internguide">
-
-  <!-- Title Page-->
-  <title>Employer Signup</title>
-
-  <!-- Font special for pages-->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
-
-  <!-- Main CSS-->
-  <link href="signup/css/main.css" rel="stylesheet" media="all">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recruiter Sign Up | InternGuide</title>
+  <link rel="shortcut icon" href="assets/images/logo/icon.png" type="image/x-icon">
+  <link rel="stylesheet" href="assets/css/font-awesome-4.7.0.min.css">
+  <link rel="stylesheet" href="assets/css/style.css?v=remaining-ui-1">
 </head>
-
-<body>
-  <div class="page-wrapper bg-dark p-t-100 p-b-50">
-    <div class="wrapper wrapper--w900">
-      <div class="card card-6">
-        <div class="card-heading">
-          <h2 class="title">Recruiter Signup</h2>
-        </div>
-        <div class="card-body">
-          <form method="POST">
-
-            <!--Employer name-->
-            <div class="form-row">
-              <div class="name">Employer Company name</div>
-              <div class="value">
-                <input class="input--style-6" type="text" name="full_name">
-              </div>
-            </div>
-
-            <!--Recruiter name-->
-            <div class="form-row">
-              <div class="name">Recruiter name</div>
-              <div class="value">
-                <input class="input--style-6" type="text" name="full_name">
-              </div>
-            </div>
-
-            <!--email-->
-            <div class="form-row">
-              <div class="name">Official Email address</div>
-              <div class="value">
-                <div class="input-group">
-                  <input class="input--style-6" type="email" name="email" placeholder="example@email.com" required>
-                </div>
-              </div>
-            </div>
-
-            <!--Password-->
-            <div class="form-row">
-              <div class="name">Password</div>
-              <div class="value">
-                <div class="input-group">
-                  <input class="input--style-6" type="password" name="pass" id="password" placeholder="">
-                </div>
-              </div>
-            </div>
-
-            <!--Confirm Password-->
-            <div class="form-row">
-              <div class="name">Re Type Password</div>
-              <div class="value">
-                <div class="input-group">
-                  <input class="input--style-6" type="password" name="repass" id="confirm_password" onkeyup="validatePassword();" placeholder="">
-                </div>
-              </div>
-            </div>
-
-
-            <!--Contact-->
-            <div class="form-row">
-              <div class="name">Contact number</div>
-              <div class="value">
-                <input class="input--style-6" type="tel" name="contact" placeholder="Enter Contact Number">
-              </div>
-            </div>
-
-
-            <!--Current Address-->
-            <div class="form-row">
-              <div class="name">Registered Office Address</div>
-              <div class="value">
-                <div class="input-group">
-                  <textarea class="textarea--style-6" name="address" placeholder="Enter your Address"></textarea>
-                </div>
-              </div>
-            </div>
-
-
-            <!--location-->
-            <div class="form-row">
-              <div class="name col-lg-2">Location</div>
-              <div class="default-select" id="default-select">
-
-                <select class="col-lg-6">
-                  <option value="1">Lebanon</option>
-                  <option value="1">Australia</option>
-                  <option value="1">Canada</option>
-                  <option value="1">japan</option>
-
-                </select>
-              </div>
-              <pre>     </pre>
-
-              <div class="col-lg-4">
-                <input class="input--style-6" type="text" name="city" placeholder="City">
-
-              </div>
-            </div>
-
-
-
-            <div class="form-row">
-              <div class="name">About the Company</div>
-              <div class="value">
-                <div class="input-group">
-                  <textarea class="textarea--style-6" name="message" placeholder="Message sent to the employer"></textarea>
-                </div>
-              </div>
-            </div>
-
-          </form>
-        </div>
-        <div class="card-footer">
-          <button class="btn btn--radius-2 btn--blue-2" type="submit">Send Application</button>
-        </div>
-      </div>
+<body class="auth-modern-page">
+  <header class="ig-header auth-site-header">
+    <div class="ig-container ig-header-inner">
+      <a class="ig-logo ig-logo-intern-guide" href="index.html"><img src="assets/images/int.png" alt="InternGuide logo"></a>
+      <button class="ig-menu-toggle" type="button" aria-controls="public-nav" aria-expanded="false" data-ig-menu-toggle><i class="fa fa-bars"></i></button>
+      <ul class="ig-nav" id="public-nav">
+        <li><a href="index.html">Home</a></li><li><a href="about.html">About Us</a></li><li><a href="internship-search.html">Find Internship</a></li><li><a href="contact-us.html">Contact</a></li><li><a href="resume-search.html">Find Candidates</a></li>
+        <li><a href="#" aria-haspopup="true" aria-expanded="false">Sign In <i class="fa fa-angle-down"></i></a><ul class="ig-subnav"><li><a href="userlogin.html">Student Login</a></li><li><a href="recruiter_login.html">Recruiter Login</a></li><li><a href="university/login.html">University Admin Login</a></li><li><a href="admin/login.html">System Admin Login</a></li></ul></li>
+        <li><a class="ig-nav-cta active" href="#" aria-haspopup="true" aria-expanded="false">Sign Up <i class="fa fa-angle-down"></i></a><ul class="ig-subnav ig-subnav-end"><li><a href="user_signup.html">Student Sign Up</a></li><li><a href="recruiter_signup.html">Recruiter Sign Up</a></li></ul></li>
+      </ul>
     </div>
-  </div>
-
-  <!-- Jquery JS-->
-  <script src="signup/vendor/jquery/jquery.min.js"></script>
-
-  <!--confirm password-->
-  <script>
-    var password = document.getElementById("password"),
-      confirm_password = document.getElementById("confirm_password");
-
-    function validatePassword() {
-      if (password.value != confirm_password.value) {
-        confirm_password.setCustomValidity("Passwords Don't Match");
-      } else {
-        confirm_password.setCustomValidity('');
-      }
-    }
-  </script>
-
-  <!-- Main JS-->
-  <script src="signup/js/global.js"></script>
-
+  </header>
+  <main class="auth-modern-shell">
+    <section class="auth-modern-brand">
+      <a href="index.html"><img src="assets/images/int.png" alt="InternGuide logo"></a>
+      <div><h2>Connect your company with emerging talent.</h2><p>Create a recruiter account to post internships and manage applicants through the InternGuide workflow.</p></div>
+      <a class="auth-back-link" href="index.html">&larr; Back to InternGuide</a>
+    </section>
+    <section class="auth-modern-card">
+      <span class="ig-eyebrow">Recruiter Registration</span>
+      <h1>Create recruiter account</h1>
+      <p>Add your company and contact information to get started.</p>
+      <form id="recruiter-signup-form" class="auth-modern-form">
+        <div class="ig-form-grid">
+          <div class="ig-field"><label for="company-name">Company name</label><input id="company-name" name="company_name" type="text" placeholder="Company name" required></div>
+          <div class="ig-field"><label for="recruiter-name">Recruiter name</label><input id="recruiter-name" name="recruiter_name" type="text" placeholder="Your full name" required></div>
+          <div class="ig-field ig-field-full"><label for="recruiter-email">Business email</label><input id="recruiter-email" name="email" type="email" placeholder="recruiter@company.com" required></div>
+          <div class="ig-field"><label for="recruiter-password">Password</label><input id="recruiter-password" name="pass" type="password" minlength="8" placeholder="At least 8 characters" required></div>
+          <div class="ig-field"><label for="recruiter-repassword">Confirm password</label><input id="recruiter-repassword" name="repass" type="password" minlength="8" placeholder="Repeat your password" required></div>
+          <div class="ig-field"><label for="recruiter-contact">Contact number</label><input id="recruiter-contact" name="contact" type="text" placeholder="Phone number"></div>
+          <div class="ig-field"><label for="recruiter-country">Country</label><input id="recruiter-country" name="country" type="text" placeholder="Country"></div>
+          <div class="ig-field"><label for="recruiter-city">City</label><input id="recruiter-city" name="city" type="text" placeholder="City"></div>
+          <div class="ig-field"><label for="recruiter-address">Company address</label><input id="recruiter-address" name="address" type="text" placeholder="Company address"></div>
+          <div class="ig-field ig-field-full"><label for="company-about">About the company</label><textarea id="company-about" name="about_company" placeholder="Brief company description"></textarea></div>
+        </div>
+        <div class="ig-message" data-form-message="recruiter-signup-form"></div>
+        <button class="template-btn" type="submit">Create Recruiter Account</button>
+      </form>
+      <div class="auth-modern-links">Already registered? <a href="recruiter_login.html">Recruiter login</a></div>
+    </section>
+  </main>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth-pages.js"></script>
+  <script src="assets/js/professional-ui.js"></script>
 </body>
-
 </html>
-<!-- end document-->

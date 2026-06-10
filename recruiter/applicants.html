@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Internship Applicants | InternGuide</title>
+  <link rel="shortcut icon" href="../assets/images/logo/icon.png" type="image/x-icon">
+  <link rel="stylesheet" href="../assets/css/font-awesome-4.7.0.min.css">
+  <link rel="stylesheet" href="../assets/css/style.css?v=final-demo-features-1">
+</head>
+<body class="portal-page">
+  <header class="ig-header portal-site-header">
+    <div class="ig-container ig-header-inner">
+      <a class="ig-logo ig-logo-intern-guide" href="../index.html"><img src="../assets/images/int.png" alt="InternGuide logo"></a>
+      <button class="ig-menu-toggle" type="button" aria-controls="portal-nav" aria-expanded="false" data-ig-menu-toggle><i class="fa fa-bars"></i></button>
+      <ul class="ig-nav portal-nav" id="portal-nav">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="dashboard.html">Back to Dashboard</a></li>
+        <li><a href="#" id="logout-link">Logout</a></li>
+        <li><a href="#" aria-haspopup="true" aria-expanded="false">Sign In <i class="fa fa-angle-down"></i></a><ul class="ig-subnav"><li><a href="../userlogin.html">Student Login</a></li><li><a href="../recruiter_login.html">Recruiter Login</a></li><li><a href="../university/login.html">University Admin Login</a></li><li><a href="../admin/login.html">System Admin Login</a></li></ul></li>
+        <li><a class="ig-nav-cta" href="#" aria-haspopup="true" aria-expanded="false">Sign Up <i class="fa fa-angle-down"></i></a><ul class="ig-subnav ig-subnav-end"><li><a href="../user_signup.html">Student Sign Up</a></li><li><a href="../recruiter_signup.html">Recruiter Sign Up</a></li></ul></li>
+      </ul>
+    </div>
+  </header>
+  <main class="ig-container portal-main">
+    <div class="portal-heading"><span class="ig-eyebrow">Recruiter Workspace</span><h1>Review applicants</h1><p>Download resumes and update each student's application status.</p></div>
+    <div id="applicants-message" class="portal-message"></div>
+    <section class="portal-card">
+      <div class="portal-card-header"><div><h2 id="applicants-title">Applicants</h2><p>Application details and submitted resumes for this internship.</p></div></div>
+      <div class="portal-table-wrap">
+        <table class="portal-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Major</th><th>Year</th><th>Applied</th><th>Resume File</th><th>Status</th></tr></thead>
+          <tbody id="applicants-table-body"><tr><td colspan="7">Loading applicants...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/recruiter-applicants.js"></script>
+  <script src="../assets/js/professional-ui.js"></script>
+</body>
+</html>

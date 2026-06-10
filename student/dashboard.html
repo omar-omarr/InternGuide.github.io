@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard | InternGuide</title>
+  <link rel="shortcut icon" href="../assets/images/logo/icon.png" type="image/x-icon">
+  <link rel="stylesheet" href="../assets/css/font-awesome-4.7.0.min.css">
+  <link rel="stylesheet" href="../assets/css/style.css?v=final-demo-features-1">
+</head>
+<body class="portal-page">
+  <header class="ig-header portal-site-header">
+    <div class="ig-container ig-header-inner">
+      <a class="ig-logo ig-logo-intern-guide" href="../index.html"><img src="../assets/images/int.png" alt="InternGuide logo"></a>
+      <button class="ig-menu-toggle" type="button" aria-controls="portal-nav" aria-expanded="false" data-ig-menu-toggle><i class="fa fa-bars"></i></button>
+      <ul class="ig-nav portal-nav" id="portal-nav">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../internship-search.html">Browse Internships</a></li>
+        <li><a href="../student-university.html">University Profile</a></li>
+        <li><a href="#" id="student-logout-link">Logout</a></li>
+        <li><a href="#" aria-haspopup="true" aria-expanded="false">Sign In <i class="fa fa-angle-down"></i></a><ul class="ig-subnav"><li><a href="../userlogin.html">Student Login</a></li><li><a href="../recruiter_login.html">Recruiter Login</a></li><li><a href="../university/login.html">University Admin Login</a></li><li><a href="../admin/login.html">System Admin Login</a></li></ul></li>
+        <li><a class="ig-nav-cta" href="#" aria-haspopup="true" aria-expanded="false">Sign Up <i class="fa fa-angle-down"></i></a><ul class="ig-subnav ig-subnav-end"><li><a href="../user_signup.html">Student Sign Up</a></li><li><a href="../recruiter_signup.html">Recruiter Sign Up</a></li></ul></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="ig-container portal-main">
+    <div class="portal-heading">
+      <span class="ig-eyebrow">Student Workspace</span>
+      <h1>Welcome, <span id="student-dashboard-name">Student</span></h1>
+      <p>Track applications, university verification, and profile readiness from one place.</p>
+    </div>
+    <div id="student-dashboard-message" class="portal-message"></div>
+
+    <section class="portal-stat-grid" aria-label="Student dashboard summary">
+      <article class="portal-stat-card"><span class="portal-stat-icon"><i class="fa fa-file-text-o"></i></span><div><strong id="student-total-applications">0</strong><span>My Applications</span></div></article>
+      <article class="portal-stat-card"><span class="portal-stat-icon"><i class="fa fa-check-circle-o"></i></span><div><strong id="student-accepted-applications">0</strong><span>Accepted</span></div></article>
+      <article class="portal-stat-card"><span class="portal-stat-icon"><i class="fa fa-star-o"></i></span><div><strong id="student-shortlisted-applications">0</strong><span>Shortlisted</span></div></article>
+      <article class="portal-stat-card"><span class="portal-stat-icon"><i class="fa fa-briefcase"></i></span><div><strong id="student-available-internships">0</strong><span>Available Internships</span></div></article>
+    </section>
+
+    <section class="student-dashboard-grid">
+      <article class="portal-card">
+        <div class="portal-card-header"><div><h2>Profile readiness</h2><p>Complete your profile to present a stronger application.</p></div><span id="student-profile-percentage" class="portal-status">0%</span></div>
+        <div class="ig-progress-track"><span id="student-profile-progress"></span></div>
+        <div class="student-readiness-list">
+          <div><span>Resume / profile</span><strong id="student-resume-status">Checking...</strong></div>
+          <div><span>University verification</span><strong id="student-university-status">Checking...</strong></div>
+        </div>
+        <div class="ig-form-actions"><a class="ig-button" href="../student-university.html">Manage University Profile</a><a class="ig-button ig-button-secondary" href="../internship-search.html">Find Internships</a></div>
+      </article>
+
+      <article class="portal-card student-shortcut-card">
+        <span class="ig-card-icon"><i class="fa fa-search"></i></span>
+        <h2>Discover approved opportunities</h2>
+        <p>Browse internships reviewed and approved through the university workflow.</p>
+        <a class="ig-button" href="../internship-search.html">Browse Available Internships</a>
+      </article>
+    </section>
+
+    <section class="student-activity-grid">
+      <article class="portal-card student-deadline-card">
+        <div class="portal-card-header"><div><h2>Upcoming Deadlines</h2><p>Approved internship opportunities closing soonest.</p></div><a class="ig-button ig-button-secondary" href="../internship-search.html">Browse All</a></div>
+        <div id="student-upcoming-deadlines" class="student-deadline-list">
+          <div class="ig-empty-state"><span class="ig-empty-state-icon"><i class="fa fa-spinner fa-spin"></i></span><h3>Loading upcoming deadlines</h3><p>Approved opportunities will appear here shortly.</p></div>
+        </div>
+      </article>
+
+      <article class="portal-card student-recent-activity-card">
+        <div class="portal-card-header"><div><h2>Recent Activity</h2><p>Your latest profile and application updates.</p></div></div>
+        <div id="student-recent-activity" class="student-activity-list">
+          <div class="ig-empty-state"><span class="ig-empty-state-icon"><i class="fa fa-spinner fa-spin"></i></span><h3>Loading activity</h3><p>Your latest updates will appear here shortly.</p></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="portal-card">
+      <div class="portal-card-header"><div><h2>My applications</h2><p>See the latest status for every internship application.</p></div></div>
+      <div id="student-application-list" class="student-application-list">
+        <div class="ig-empty-state"><span class="ig-empty-state-icon"><i class="fa fa-spinner fa-spin"></i></span><h3>Loading applications</h3><p>Your applications will appear here shortly.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/student-dashboard.js"></script>
+  <script src="../assets/js/professional-ui.js"></script>
+</body>
+</html>
