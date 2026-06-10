@@ -27,6 +27,14 @@ logs/*
 test-artifacts/*
 !test-artifacts/.gitkeep
 
+# Generated output and temporary directories
+coverage/
+dist/
+build/
+.cache/
+tmp/
+temp/
+
 # Local-only files that must never be committed
 /Final Report Bau internships platform.docx
 /link.txt
