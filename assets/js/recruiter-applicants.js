@@ -89,7 +89,17 @@
           '  </div></td>',
           '</tr>',
           '<tr>',
-          '  <td colspan="7"><strong>Cover letter:</strong> ' + escapeHtml(application.cover_letter || 'No cover letter provided.') + '</td>',
+          '  <td colspan="7"><strong>Cover letter:</strong> ' + escapeHtml(application.cover_letter || 'No cover letter provided.') +
+          '  <div class="ig-form-actions"><a class="ig-button ig-button-secondary" href="../messages.html?application_id=' + encodeURIComponent(application.id) + '">Messages</a></div>' +
+          '  <form class="training-inline-form" data-interview-form="' + application.id + '">' +
+          '    <h4>Schedule interview</h4><div class="ig-form-grid">' +
+          '    <label class="ig-field">Date<input name="interview_date" type="date" value="' + escapeHtml(String(application.interview_date || '').slice(0, 10)) + '" required></label>' +
+          '    <label class="ig-field">Time<input name="interview_time" type="time" value="' + escapeHtml(String(application.interview_time || '').slice(0, 5)) + '" required></label>' +
+          '    <label class="ig-field">Location<input name="interview_location" value="' + escapeHtml(application.interview_location || '') + '" required></label>' +
+          '    <label class="ig-field">Meeting link<input name="meeting_link" type="url" value="' + escapeHtml(application.meeting_link || '') + '"></label>' +
+          '    <label class="ig-field ig-field-full">Notes<textarea name="interview_notes">' + escapeHtml(application.interview_notes || '') + '</textarea></label></div>' +
+          '    <button class="ig-button" type="submit">Schedule Interview</button>' +
+          '  </form></td>',
           '</tr>',
         ].join('');
       })
@@ -155,6 +165,25 @@
         setMessage('Resume download started.', 'success');
       } catch (error) {
         setMessage(error.message || 'Unable to download resume.', 'error');
+      }
+    });
+
+    tableBody.addEventListener('submit', async function (event) {
+      var applicationId = event.target.dataset.interviewForm;
+
+      if (!applicationId) {
+        return;
+      }
+
+      event.preventDefault();
+
+      try {
+        await window.InternGuideAPI.scheduleInterview(applicationId, window.InternGuideAPI.formToObject(event.target));
+        setMessage('Interview scheduled and student notified.', 'success');
+        var result = await window.InternGuideAPI.getApplicants(id);
+        tableBody.innerHTML = renderRows(result.applications || []);
+      } catch (error) {
+        setMessage(error.message || 'Unable to schedule interview.', 'error');
       }
     });
 

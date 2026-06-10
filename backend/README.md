@@ -329,3 +329,21 @@ Run the local end-to-end PostgreSQL workflow smoke test with:
 ```bash
 npm run test:workflow
 ```
+
+## BAU Career Center Modules
+
+Apply the idempotent Career Center migration after the portal upgrade:
+
+```bash
+npm run migrate:bau-career-center
+```
+
+Seed local presentation data and run both smoke tests:
+
+```bash
+npm run seed:demo
+npm run test:workflow
+npm run test:bau-career-center
+```
+
+The protected `/api/career-center` routes support training records, weekly reports, company evaluations, final-report review, application messaging, analytics, and CSV exports.

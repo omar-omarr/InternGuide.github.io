@@ -149,6 +149,21 @@
     return data;
   }
 
+  async function download(path) {
+    var response = await fetch(API_BASE + path, {
+      headers: { Authorization: 'Bearer ' + getToken() },
+    });
+
+    if (!response.ok) {
+      throw new Error(formatErrorMessage(parseResponseText(await response.text())));
+    }
+
+    return {
+      blob: await response.blob(),
+      filename: ((response.headers.get('Content-Disposition') || '').match(/filename="?([^"]+)"?/i) || [])[1] || 'export.csv',
+    };
+  }
+
   function formToObject(form) {
     var values = {};
 
@@ -370,6 +385,35 @@
     },
     listAuditLogs: function (params) {
       return request('/system-admin/audit-logs' + buildQuery(params), { auth: true });
+    },
+    careerAnalytics: function () {
+      return request('/career-center/analytics', { auth: true });
+    },
+    listTrainingRecords: function (params) {
+      return request('/career-center/training-records' + buildQuery(params), { auth: true });
+    },
+    getTrainingRecord: function (id) {
+      return request('/career-center/training-records/' + encodeURIComponent(id), { auth: true });
+    },
+    updateTrainingStatus: function (id, data) {
+      return request('/career-center/training-records/' + encodeURIComponent(id) + '/status', {
+        method: 'PATCH',
+        body: data,
+        auth: true,
+      });
+    },
+    reviewFinalReport: function (id, data) {
+      return request('/career-center/training-records/' + encodeURIComponent(id) + '/final-report/review', {
+        method: 'PATCH',
+        body: data,
+        auth: true,
+      });
+    },
+    downloadFinalReport: function (id) {
+      return download('/career-center/training-records/' + encodeURIComponent(id) + '/final-report');
+    },
+    exportCareerData: function (dataset) {
+      return download('/career-center/exports/' + encodeURIComponent(dataset));
     },
   };
 })();

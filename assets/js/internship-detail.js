@@ -37,9 +37,13 @@
     message.style.color = type === 'error' ? '#cc2229' : '#168a45';
   }
 
-  function renderDetails(internship) {
+  function renderDetails(internship, match) {
     var verifiedCompany = internship.recruiter_verified
       ? '<span class="ig-verified-company-badge"><i class="fa fa-shield"></i> Verified Company</span>'
+      : '';
+    var matchHtml = match
+      ? '<span class="ig-match-score"><i class="fa fa-line-chart"></i> Match Score: ' + escapeHtml(match.score) + '%</span>' +
+        '<p class="ig-match-reasons">' + escapeHtml((match.reasons || []).join(' | ')) + '</p>'
       : '';
 
     return [
@@ -47,6 +51,7 @@
       '  <div class="job-text">',
       '    <span class="ig-approved-badge"><i class="fa fa-check-circle"></i> University Approved</span>',
       '    ' + verifiedCompany,
+      '    ' + matchHtml,
       '    <h3>' + escapeHtml(internship.title) + '</h3>',
       '    <ul class="mt-4">',
       '      <li class="mb-3"><h5><i class="fa fa-building"></i> ' + escapeHtml(internship.company_name) + '</h5></li>',
@@ -85,7 +90,10 @@
 
     try {
       var result = await window.InternGuideAPI.getInternship(id);
-      details.innerHTML = renderDetails(result.internship);
+      var match = currentUser && currentUser.role === 'student' && window.InternGuideAPI.getToken()
+        ? (await window.InternGuideAPI.getStudentMatch(id)).match
+        : null;
+      details.innerHTML = renderDetails(result.internship, match);
     } catch (error) {
       details.innerHTML = '<div class="ig-empty-state"><span class="ig-empty-state-icon"><i class="fa fa-exclamation-circle"></i></span><h3>Unable to load internship</h3><p>' + escapeHtml(error.message) + '</p></div>';
       form.style.display = 'none';

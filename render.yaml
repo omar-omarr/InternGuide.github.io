@@ -4,7 +4,7 @@ services:
     runtime: node
     rootDir: backend
     buildCommand: npm ci
-    preDeployCommand: npm run db:init && npm run migrate:portal-upgrade
+    preDeployCommand: npm run db:init && npm run migrate:portal-upgrade && npm run migrate:bau-career-center
     startCommand: npm start
     healthCheckPath: /api/health
     autoDeployTrigger: commit
@@ -23,6 +23,8 @@ services:
         value: https://omar-omarr.github.io
       - key: UPLOAD_DIR
         value: /var/data/resumes
+      - key: REPORT_UPLOAD_DIR
+        value: /var/data/reports
     disk:
       name: internguide-resumes
       mountPath: /var/data

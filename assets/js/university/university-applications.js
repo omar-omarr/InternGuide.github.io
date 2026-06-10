@@ -27,7 +27,8 @@
           '  <td>' + api.escapeHtml(item.company_name) + '</td>',
           '  <td><span class="admin-status admin-status-' + api.escapeHtml(item.application_status) + '">' + api.escapeHtml(item.application_status.replace(/_/g, ' ')) + '</span></td>',
           '  <td><span class="admin-status admin-status-' + api.escapeHtml(item.university_verification_status) + '">' + api.escapeHtml(item.university_verification_status) + '</span></td>',
-          '  <td>' + api.escapeHtml(api.formatDate(item.created_at)) + '</td>',
+          '  <td>' + api.escapeHtml(api.formatDate(item.created_at)) +
+          (item.interview_date ? '<br><strong>Interview:</strong> ' + api.escapeHtml(api.formatDate(item.interview_date)) + ' ' + api.escapeHtml(item.interview_time || '') + '<br>' + api.escapeHtml(item.interview_location || '') : '') + '</td>',
           '</tr>',
         ].join('');
       })

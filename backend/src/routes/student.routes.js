@@ -1,11 +1,12 @@
 const express = require('express');
-const { body } = require('express-validator');
+const { body, param } = require('express-validator');
 const pool = require('../config/db');
 const { authenticateToken, requireStudent } = require('../middleware/auth');
 const validateRequest = require('../middleware/validate');
 const asyncHandler = require('../utils/asyncHandler');
 const { logAudit } = require('../services/audit.service');
 const { createNotification } = require('../services/notification.service');
+const { calculateMatch } = require('../services/matching.service');
 
 const router = express.Router();
 
@@ -19,6 +20,11 @@ const profileValidators = [
   body('major').trim().isLength({ min: 2, max: 160 }).withMessage('Major is required.'),
   body('academic_year').trim().isLength({ min: 1, max: 80 }).withMessage('Academic year is required.'),
   body('skills').trim().isLength({ min: 2, max: 2000 }).withMessage('Add at least one skill.'),
+  body('location_preference').optional({ checkFalsy: true }).trim().isLength({ max: 160 }),
+  body('internship_type_preference')
+    .optional({ checkFalsy: true })
+    .isIn(['Full Time', 'Part Time', 'Remote', 'Office Internship'])
+    .withMessage('Invalid internship type preference.'),
   body('gpa').optional({ checkFalsy: true }).isFloat({ min: 0, max: 4 }).withMessage('GPA must be between 0 and 4.'),
 ];
 
@@ -34,6 +40,8 @@ async function getCurrentProfile(studentId) {
       sup.major,
       sup.academic_year,
       sup.skills,
+      sup.location_preference,
+      sup.internship_type_preference,
       sup.gpa,
       sup.verification_status,
       sup.verified_at,
@@ -117,6 +125,8 @@ async function upsertProfile(req, res) {
   const major = req.body.major.trim();
   const academicYear = req.body.academic_year.trim();
   const skills = req.body.skills.trim();
+  const locationPreference = req.body.location_preference || null;
+  const internshipTypePreference = req.body.internship_type_preference || null;
   const gpa = req.body.gpa ? Number(req.body.gpa) : null;
   const selection = await validateUniversitySelection(universityId, departmentId);
 
@@ -138,26 +148,54 @@ async function upsertProfile(req, res) {
            major = $5,
            academic_year = $6,
            skills = $7,
-           gpa = $8,
+           location_preference = $8,
+           internship_type_preference = $9,
+           gpa = $10,
            verification_status = 'pending',
            verified_by = NULL,
            verified_at = NULL,
            rejection_reason = NULL,
            updated_at = NOW()
-       WHERE id = $9
-         AND student_id = $10
+       WHERE id = $11
+         AND student_id = $12
        RETURNING *`,
-      [universityId, departmentId, studentNumber, faculty, major, academicYear, skills, gpa, existing.id, req.auth.id],
+      [
+        universityId,
+        departmentId,
+        studentNumber,
+        faculty,
+        major,
+        academicYear,
+        skills,
+        locationPreference,
+        internshipTypePreference,
+        gpa,
+        existing.id,
+        req.auth.id,
+      ],
     );
     profile = result.rows[0];
   } else {
     try {
       const result = await pool.query(
         `INSERT INTO student_university_profiles
-          (student_id, university_id, department_id, student_number, faculty, major, academic_year, skills, gpa)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+          (student_id, university_id, department_id, student_number, faculty, major, academic_year, skills,
+           location_preference, internship_type_preference, gpa)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
          RETURNING *`,
-        [req.auth.id, universityId, departmentId, studentNumber, faculty, major, academicYear, skills, gpa],
+        [
+          req.auth.id,
+          universityId,
+          departmentId,
+          studentNumber,
+          faculty,
+          major,
+          academicYear,
+          skills,
+          locationPreference,
+          internshipTypePreference,
+          gpa,
+        ],
       );
       profile = result.rows[0];
     } catch (error) {
@@ -195,6 +233,91 @@ async function upsertProfile(req, res) {
 }
 
 router.get(
+  '/matches',
+  asyncHandler(async (req, res) => {
+    const profile = await pool.query(
+      `SELECT
+        sup.major AS profile_major,
+        u.major AS user_major,
+        sup.skills,
+        sup.academic_year,
+        sup.location_preference,
+        sup.internship_type_preference,
+        d.name AS department_name
+       FROM users u
+       LEFT JOIN LATERAL (
+         SELECT *
+         FROM student_university_profiles
+         WHERE student_id = u.id
+         ORDER BY updated_at DESC, id DESC
+         LIMIT 1
+       ) sup ON true
+       LEFT JOIN departments d ON d.id = sup.department_id
+       WHERE u.id = $1`,
+      [req.auth.id],
+    );
+    const internships = await pool.query(
+      `SELECT
+        i.id, i.title, i.description, i.location, i.category, i.type, i.requirements, i.required_skills,
+        i.academic_year, i.stipend, i.deadline, COALESCE(i.company_name, r.company_name) AS company_name
+       FROM internships i
+       JOIN recruiters r ON r.id = i.recruiter_id
+       WHERE i.status = 'active'
+         AND EXISTS (
+           SELECT 1 FROM internship_university_approvals iua
+           WHERE iua.internship_id = i.id AND iua.status = 'approved'
+         )
+       ORDER BY i.created_at DESC`,
+    );
+    const studentProfile = profile.rows[0] || {};
+
+    return res.json({
+      internships: internships.rows.map((internship) => ({
+        ...internship,
+        match: calculateMatch(studentProfile, internship),
+      })),
+    });
+  }),
+);
+
+router.get(
+  '/matches/:id',
+  param('id').isInt({ min: 1 }).withMessage('Invalid internship id.'),
+  validateRequest,
+  asyncHandler(async (req, res) => {
+    const [profile, internship] = await Promise.all([
+      pool.query(
+        `SELECT sup.major AS profile_major, u.major AS user_major, sup.skills, sup.academic_year,
+          sup.location_preference, sup.internship_type_preference, d.name AS department_name
+         FROM users u
+         LEFT JOIN LATERAL (
+           SELECT * FROM student_university_profiles WHERE student_id = u.id ORDER BY updated_at DESC, id DESC LIMIT 1
+         ) sup ON true
+         LEFT JOIN departments d ON d.id = sup.department_id
+         WHERE u.id = $1`,
+        [req.auth.id],
+      ),
+      pool.query(
+        `SELECT i.*, COALESCE(i.company_name, r.company_name) AS company_name
+         FROM internships i JOIN recruiters r ON r.id = i.recruiter_id
+         WHERE i.id = $1 AND i.status = 'active'
+           AND EXISTS (
+             SELECT 1 FROM internship_university_approvals iua
+             WHERE iua.internship_id = i.id AND iua.status = 'approved'
+           )`,
+        [req.params.id],
+      ),
+    ]);
+
+    if (!internship.rows[0]) {
+      return res.status(404).json({ message: 'Internship not found.' });
+    }
+
+    return res.json({ match: calculateMatch(profile.rows[0] || {}, internship.rows[0]) });
+  }),
+);
+
+router.get(
   '/dashboard',
   asyncHandler(async (req, res) => {
     const [studentResult, applicationsResult, profile, availableResult] = await Promise.all([
@@ -210,6 +333,11 @@ router.get(
           a.status,
           a.applied_at,
           a.updated_at,
+          a.interview_date,
+          a.interview_time,
+          a.interview_location,
+          a.meeting_link,
+          a.interview_notes,
           i.id AS internship_id,
           i.title,
           COALESCE(i.company_name, r.company_name) AS company_name,

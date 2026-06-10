@@ -1,5 +1,7 @@
 # InternGuide University Portal Upgrade
 
+> The university portal has been extended into a BAU Career Center internship management system. See `BAU_CAREER_CENTER_UPGRADE.md` and `DEMO_DATA.md` for training, evaluation, reporting, analytics, interview, matching, messaging, demo-data, and deployment details.
+
 ## What Was Added
 
 - System-admin dashboard counts, notifications, searchable directories, internship approval actions, recruiter verification, and a platform-wide applications page.

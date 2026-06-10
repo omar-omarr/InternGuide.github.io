@@ -120,6 +120,8 @@
       form.elements.major.value = currentProfile.major || '';
       form.elements.academic_year.value = currentProfile.academic_year || '';
       form.elements.skills.value = currentProfile.skills || '';
+      form.elements.location_preference.value = currentProfile.location_preference || '';
+      form.elements.internship_type_preference.value = currentProfile.internship_type_preference || '';
       form.elements.gpa.value = currentProfile.gpa || '';
     }
 

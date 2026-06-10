@@ -608,6 +608,30 @@ code {
   color: #b42318;
 }
 
+.admin-status-not_started,
+.admin-status-not_submitted,
+.admin-status-cancelled {
+  background: #f2f4f7;
+  border-color: #d0d5dd;
+  color: #475467;
+}
+
+.admin-status-training_started,
+.admin-status-weekly_reports_pending,
+.admin-status-student_report_submitted {
+  background: #eff8ff;
+  border-color: #b2ddff;
+  color: #175cd3;
+}
+
+.admin-status-company_evaluated,
+.admin-status-university_reviewed,
+.admin-status-completed {
+  background: #ecfdf3;
+  border-color: #abefc6;
+  color: #067647;
+}
+
 .admin-notification-list {
   display: grid;
   gap: 10px;

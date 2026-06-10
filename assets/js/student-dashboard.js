@@ -83,6 +83,11 @@
           ['submitted', 'viewed', 'shortlisted', 'interview_scheduled'].indexOf(application.status) !== -1
             ? '<button class="ig-button ig-button-secondary" type="button" data-withdraw-id="' + application.id + '">Withdraw</button>'
             : '';
+        var interviewDetails = application.interview_date
+          ? '<div class="student-application-meta"><span><i class="fa fa-calendar"></i> Interview: ' +
+            escapeHtml(formatDate(application.interview_date)) + ' ' + escapeHtml(application.interview_time || '') +
+            '</span><span><i class="fa fa-map-marker"></i> ' + escapeHtml(application.interview_location || '') + '</span></div>'
+          : '';
 
         return [
           '<article class="student-application-card">',
@@ -91,8 +96,10 @@
           '    <p><i class="fa fa-building-o"></i> ' + escapeHtml(application.company_name) + '</p>',
           '    <div class="student-application-meta"><span><i class="fa fa-map-marker"></i> ' + escapeHtml(application.location) + '</span><span><i class="fa fa-briefcase"></i> ' + escapeHtml(application.type) + '</span><span><i class="fa fa-calendar-o"></i> Deadline: ' + escapeHtml(formatDate(application.deadline)) + '</span></div>',
           '    <div class="application-timeline">' + timeline + '</div>',
+          '    ' + interviewDetails,
           '  </div>',
-          '  <div class="student-application-action"><span>Applied ' + escapeHtml(formatDate(application.applied_at)) + '</span>' + detailsLink + withdrawButton + '</div>',
+          '  <div class="student-application-action"><span>Applied ' + escapeHtml(formatDate(application.applied_at)) + '</span>' + detailsLink +
+            '<a class="ig-button ig-button-secondary" href="../messages.html?application_id=' + encodeURIComponent(application.id) + '">Messages</a>' + withdrawButton + '</div>',
           '</article>',
         ].join('');
       })

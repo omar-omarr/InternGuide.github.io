@@ -11,11 +11,14 @@
     "start": "node src/server.js",
     "db:init": "node db/scripts/run_sql_file.js db/schema.sql",
     "migrate:portal-upgrade": "node db/scripts/run_sql_file.js db/migrations/20260610_university_portal_upgrade.sql",
+    "migrate:bau-career-center": "node db/scripts/run_sql_file.js db/migrations/20260610_bau_career_center_modules.sql",
     "migrate:admin-foundation": "node db/scripts/run_sql_file.js db/migrations/20260603_add_admin_university_foundation.sql",
     "migrate:university-admin-indexes": "node db/scripts/run_sql_file.js db/migrations/20260603_add_university_admin_indexes.sql",
     "seed:admin-university": "node db/seeds/seed_admin_university.js",
     "seed:demo-system-admin": "node db/seeds/seed_demo_system_admin.js",
-    "test:workflow": "node tests/portal-workflow.smoke.js"
+    "seed:demo": "node scripts/seed-demo-data.js",
+    "test:workflow": "node tests/portal-workflow.smoke.js",
+    "test:bau-career-center": "node tests/bau-career-center.smoke.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

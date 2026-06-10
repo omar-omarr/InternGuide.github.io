@@ -3914,7 +3914,7 @@ body.public-page {
 }
 
 .homepage-role-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr))
+  grid-template-columns: repeat(4, minmax(0, 1fr))
 }
 
 .homepage-info-card {
@@ -6112,4 +6112,203 @@ body {
   background: #f2f4f7;
   border-color: #d0d5dd;
   color: #475467;
+}
+
+.ig-match-score {
+  align-items: center;
+  background: #eef4ff;
+  border: 1px solid #b2ccff;
+  border-radius: 999px;
+  color: #1849a9;
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 800;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding: 7px 11px;
+}
+
+.ig-match-reasons {
+  color: var(--ig-muted);
+  font-size: 12px;
+  margin: 6px 0 0;
+}
+
+.training-record-list,
+.training-action-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.training-record-card {
+  margin-bottom: 0;
+}
+
+.training-meta-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 18px 0;
+}
+
+.training-meta-grid span {
+  background: #f8fafc;
+  border: 1px solid var(--ig-line);
+  border-radius: 12px;
+  color: var(--ig-muted);
+  display: grid;
+  font-size: 13px;
+  gap: 5px;
+  padding: 13px;
+}
+
+.training-meta-grid strong {
+  color: var(--ig-ink);
+}
+
+.training-action-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 20px;
+}
+
+.training-inline-form {
+  background: #f8fafc;
+  border: 1px solid var(--ig-line);
+  border-radius: 14px;
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+}
+
+.training-inline-form h4 {
+  color: var(--ig-ink);
+  margin: 0;
+}
+
+.training-inline-form label {
+  color: var(--ig-ink);
+  display: grid;
+  font-size: 13px;
+  font-weight: 700;
+  gap: 6px;
+}
+
+.training-inline-form input,
+.training-inline-form select,
+.training-inline-form textarea,
+.message-compose-form textarea {
+  background: #fff;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  min-height: 42px;
+  padding: 9px 11px;
+  width: 100%;
+}
+
+.training-inline-form textarea,
+.message-compose-form textarea {
+  min-height: 92px;
+}
+
+.training-score-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.training-evaluation-summary {
+  background: #ecfdf3;
+  border: 1px solid #abefc6;
+  border-radius: 12px;
+  color: #087443;
+  display: grid;
+  gap: 5px;
+  padding: 14px;
+}
+
+.training-evaluation-summary p {
+  margin: 0;
+}
+
+.message-thread-card {
+  margin: 0 auto;
+  max-width: 900px;
+}
+
+.message-thread-list {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.message-bubble {
+  background: #f8fafc;
+  border: 1px solid var(--ig-line);
+  border-radius: 14px;
+  justify-self: start;
+  max-width: 75%;
+  padding: 13px 15px;
+}
+
+.message-bubble.is-mine {
+  background: #fff7ed;
+  border-color: #fed7aa;
+  justify-self: end;
+}
+
+.message-bubble p {
+  color: var(--ig-ink);
+  margin: 6px 0;
+}
+
+.message-bubble span {
+  color: var(--ig-muted);
+  font-size: 11px;
+}
+
+.message-compose-form {
+  border-top: 1px solid var(--ig-line);
+  display: grid;
+  gap: 10px;
+  padding-top: 20px;
+}
+
+.ig-status-not_started,
+.ig-status-not_submitted {
+  background: #f2f4f7;
+  border-color: #d0d5dd;
+  color: #475467;
+}
+
+.ig-status-training_started,
+.ig-status-weekly_reports_pending,
+.ig-status-student_report_submitted {
+  background: #eff8ff;
+  border-color: #b2ddff;
+  color: #175cd3;
+}
+
+.ig-status-company_evaluated,
+.ig-status-university_reviewed,
+.ig-status-completed {
+  background: #ecfdf3;
+  border-color: #abefc6;
+  color: #087443;
+}
+
+.ig-status-cancelled {
+  background: #fef3f2;
+  border-color: #fecdca;
+  color: #b42318;
+}
+
+@media (max-width: 820px) {
+  .training-meta-grid,
+  .training-action-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .message-bubble {
+    max-width: 92%;
+  }
 }

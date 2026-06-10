@@ -20,11 +20,11 @@ function errorHandler(err, req, res, next) {
   }
 
   if (err instanceof multer.MulterError) {
-    const message = err.code === 'LIMIT_FILE_SIZE' ? 'Resume file must be 5MB or smaller.' : err.message;
+    const message = err.code === 'LIMIT_FILE_SIZE' ? 'Uploaded PDF exceeds the allowed file size.' : err.message;
     return sendError(res, 400, message);
   }
 
-  if (err.message === 'Resume must be a PDF file.') {
+  if (err.message === 'Resume must be a PDF file.' || err.message === 'Final report must be a PDF file.') {
     return sendError(res, 400, err.message);
   }
 

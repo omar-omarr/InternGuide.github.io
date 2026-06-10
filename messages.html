@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Application Messages | BAU Career Center Portal</title>
+  <link rel="shortcut icon" href="assets/images/logo/icon.png" type="image/x-icon">
+  <link rel="stylesheet" href="assets/css/font-awesome-4.7.0.min.css">
+  <link rel="stylesheet" href="assets/css/style.css?v=bau-career-center-1">
+</head>
+<body class="portal-page">
+  <header class="ig-header portal-site-header"><div class="ig-container ig-header-inner"><a class="ig-logo" href="index.html"><img src="assets/images/int.png" alt="InternGuide"></a><ul class="ig-nav portal-nav"><li><a href="index.html">Home</a></li><li><a href="#" id="message-dashboard-link">Dashboard</a></li><li><a href="#" id="message-logout-link">Logout</a></li></ul></div></header>
+  <main class="ig-container portal-main">
+    <div class="portal-heading"><span class="ig-eyebrow">Application Communication</span><h1 id="message-thread-title">Message thread</h1><p>Messages are restricted to the student and recruiter connected to this application.</p></div>
+    <div id="message-thread-alert" class="portal-message"></div>
+    <section class="portal-card message-thread-card">
+      <div id="message-thread-list" class="message-thread-list"><p>Loading messages...</p></div>
+      <form id="message-thread-form" class="message-compose-form"><label for="message-body">New message</label><textarea id="message-body" name="message_body" maxlength="4000" required placeholder="Write a clear application-related message"></textarea><button class="ig-button" type="submit">Send Message</button></form>
+    </section>
+  </main>
+  <script src="assets/js/config.js"></script><script src="assets/js/api.js"></script><script src="assets/js/application-messages.js"></script><script src="assets/js/professional-ui.js"></script>
+</body>
+</html>

@@ -62,6 +62,8 @@ const internshipValidators = [
     .isIn(['Full Time', 'Part Time', 'Remote', 'Office Internship'])
     .withMessage('Type must be Full Time, Part Time, Remote, or Office Internship.'),
   body('requirements').optional({ checkFalsy: true }).trim().isLength({ max: 3000 }),
+  body('required_skills').optional({ checkFalsy: true }).trim().isLength({ max: 3000 }),
+  body('academic_year').optional({ checkFalsy: true }).trim().isLength({ max: 80 }),
   body('stipend').optional({ checkFalsy: true }).trim().isLength({ max: 120 }),
   body('deadline').optional({ checkFalsy: true }).isISO8601().withMessage('Deadline must be a valid date.'),
   body('status').optional({ checkFalsy: true }).isIn(['active', 'closed']),
@@ -153,6 +155,8 @@ router.get(
         i.category,
         i.type,
         i.stipend,
+        i.required_skills,
+        i.academic_year,
         i.deadline,
         i.status,
         'approved' AS approval_status,
@@ -190,6 +194,8 @@ router.get(
         i.category,
         i.type,
         i.requirements,
+        i.required_skills,
+        i.academic_year,
         i.stipend,
         i.deadline,
         i.status,
@@ -233,8 +239,9 @@ router.post(
 
       const result = await client.query(
         `INSERT INTO internships
-          (recruiter_id, title, company_name, description, location, category, type, requirements, stipend, deadline, status)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, COALESCE($11, 'active'))
+          (recruiter_id, title, company_name, description, location, category, type, requirements, required_skills,
+           academic_year, stipend, deadline, status)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, COALESCE($13, 'active'))
          RETURNING *`,
         [
           req.auth.id,
@@ -245,6 +252,8 @@ router.post(
           req.body.category || null,
           req.body.type,
           req.body.requirements || null,
+          req.body.required_skills || null,
+          req.body.academic_year || null,
           req.body.stipend || null,
           req.body.deadline || null,
           req.body.status || null,
@@ -299,11 +308,13 @@ router.put(
              category = $5,
              type = $6,
              requirements = $7,
-             stipend = $8,
-             deadline = $9,
-             status = COALESCE($10, status),
+             required_skills = $8,
+             academic_year = $9,
+             stipend = $10,
+             deadline = $11,
+             status = COALESCE($12, status),
              updated_at = NOW()
-         WHERE id = $11 AND recruiter_id = $12
+         WHERE id = $13 AND recruiter_id = $14
          RETURNING *`,
         [
           req.body.title.trim(),
@@ -313,6 +324,8 @@ router.put(
           req.body.category || null,
           req.body.type,
           req.body.requirements || null,
+          req.body.required_skills || null,
+          req.body.academic_year || null,
           req.body.stipend || null,
           req.body.deadline || null,
           req.body.status || null,

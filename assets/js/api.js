@@ -242,6 +242,12 @@
     getStudentDashboard: function () {
       return request('/student/dashboard', { auth: true });
     },
+    getStudentMatches: function () {
+      return request('/student/matches', { auth: true });
+    },
+    getStudentMatch: function (id) {
+      return request('/student/matches/' + encodeURIComponent(id), { auth: true });
+    },
     createStudentUniversityProfile: function (data) {
       return request('/student/university-profile', { method: 'POST', body: data, auth: true });
     },
@@ -256,6 +262,62 @@
     },
     markAllNotificationsRead: function () {
       return request('/notifications/read-all', { method: 'PATCH', auth: true });
+    },
+    scheduleInterview: function (id, data) {
+      return request('/applications/' + encodeURIComponent(id) + '/interview', { method: 'PATCH', body: data, auth: true });
+    },
+    listTrainingRecords: function () {
+      return request('/career-center/training-records', { auth: true });
+    },
+    getTrainingRecord: function (id) {
+      return request('/career-center/training-records/' + encodeURIComponent(id), { auth: true });
+    },
+    updateTrainingStatus: function (id, data) {
+      return request('/career-center/training-records/' + encodeURIComponent(id) + '/status', {
+        method: 'PATCH',
+        body: data,
+        auth: true,
+      });
+    },
+    submitWeeklyReport: function (id, data) {
+      return request('/career-center/training-records/' + encodeURIComponent(id) + '/weekly-reports', {
+        method: 'POST',
+        body: data,
+        auth: true,
+      });
+    },
+    submitCompanyEvaluation: function (id, data) {
+      return request('/career-center/training-records/' + encodeURIComponent(id) + '/evaluation', {
+        method: 'POST',
+        body: data,
+        auth: true,
+      });
+    },
+    uploadFinalReport: function (id, formData) {
+      return request('/career-center/training-records/' + encodeURIComponent(id) + '/final-report', {
+        method: 'POST',
+        body: formData,
+        auth: true,
+      });
+    },
+    downloadFinalReport: function (id) {
+      return download('/career-center/training-records/' + encodeURIComponent(id) + '/final-report');
+    },
+    listApplicationMessages: function (id) {
+      return request('/career-center/applications/' + encodeURIComponent(id) + '/messages', { auth: true });
+    },
+    sendApplicationMessage: function (id, messageBody) {
+      return request('/career-center/applications/' + encodeURIComponent(id) + '/messages', {
+        method: 'POST',
+        body: { message_body: messageBody },
+        auth: true,
+      });
+    },
+    markApplicationMessagesRead: function (id) {
+      return request('/career-center/applications/' + encodeURIComponent(id) + '/messages/read', {
+        method: 'PATCH',
+        auth: true,
+      });
     },
   };
 })();

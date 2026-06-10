@@ -34,12 +34,17 @@
     var verifiedCompany = internship.recruiter_verified
       ? '<span class="ig-verified-company-badge"><i class="fa fa-shield"></i> Verified Company</span>'
       : '';
+    var match = internship.match
+      ? '<span class="ig-match-score"><i class="fa fa-line-chart"></i> Match Score: ' + escapeHtml(internship.match.score) + '%</span>' +
+        '<p class="ig-match-reasons">' + escapeHtml((internship.match.reasons || []).join(' | ')) + '</p>'
+      : '';
 
     return [
       '<div class="single-job mb-4 d-lg-flex justify-content-between">',
       '  <div class="job-text">',
       '    <span class="ig-approved-badge"><i class="fa fa-check-circle"></i> University Approved</span>',
       '    ' + verifiedCompany,
+      '    ' + match,
       '    <h4><a href="internship.html?id=' + encodeURIComponent(internship.id) + '">' + escapeHtml(internship.title) + '</a></h4>',
       '    <ul class="mt-4">',
       '      <li class="mb-3"><h5><i class="fa fa-map-marker"></i> ' + escapeHtml(internship.location) + '</h5></li>',
@@ -99,8 +104,21 @@
     list.innerHTML = '<div class="ig-empty-state"><span class="ig-empty-state-icon"><i class="fa fa-spinner fa-spin"></i></span><h3>Loading approved internships</h3><p>The latest university-approved opportunities will appear here.</p></div>';
 
     try {
-      var result = await window.InternGuideAPI.listInternships(getFilters(form));
+      var user = window.InternGuideAPI.getCurrentUser();
+      var filters = getFilters(form);
+      var result = user && user.role === 'student' && window.InternGuideAPI.getToken()
+        ? await window.InternGuideAPI.getStudentMatches()
+        : await window.InternGuideAPI.listInternships(filters);
       var internships = result.internships || [];
+
+      if (user && user.role === 'student') {
+        internships = internships.filter(function (internship) {
+          return (!filters.type || internship.type === filters.type) &&
+            (!filters.location || String(internship.location || '').toLowerCase().indexOf(filters.location.toLowerCase()) !== -1) &&
+            (!filters.keyword || [internship.title, internship.company_name, internship.category, internship.requirements, internship.required_skills]
+              .join(' ').toLowerCase().indexOf(filters.keyword.toLowerCase()) !== -1);
+        });
+      }
 
       count.textContent = internships.length + ' Results found';
 
