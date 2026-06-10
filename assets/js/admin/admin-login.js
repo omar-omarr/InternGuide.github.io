@@ -44,7 +44,7 @@
 
       if (result.user && result.user.role === 'system_admin') {
         api.saveSession(token, result.user);
-        window.location.href = '/admin/dashboard.html';
+        window.InternGuideApp.navigate('admin/dashboard.html');
         return;
       }
 
@@ -98,7 +98,7 @@
         }
 
         api.saveSession(result.token, result.user);
-        window.location.href = '/admin/dashboard.html';
+        window.InternGuideApp.navigate('admin/dashboard.html');
       } catch (error) {
         api.clearSession();
         api.setMessage('admin-login-message', error.message || 'Unable to log in.', 'error');

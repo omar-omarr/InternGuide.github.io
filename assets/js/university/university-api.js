@@ -63,8 +63,10 @@
   }
 
   function redirectToLogin() {
-    if (window.location.pathname !== '/university/login.html') {
-      window.location.href = '/university/login.html';
+    var loginPath = window.InternGuideApp.path('university/login.html');
+
+    if (window.location.pathname !== loginPath) {
+      window.InternGuideApp.navigate('university/login.html');
     }
   }
 
@@ -266,7 +268,7 @@
     logout.addEventListener('click', function (event) {
       event.preventDefault();
       clearSession();
-      window.location.href = '/university/login.html';
+      window.InternGuideApp.navigate('university/login.html');
     });
   }
 

@@ -34,7 +34,7 @@
 
       if (result.user && result.user.role === 'university_admin' && result.user.universityId) {
         api.saveSession(token, result.user);
-        window.location.href = '/university/dashboard.html';
+        window.InternGuideApp.navigate('university/dashboard.html');
         return;
       }
 
@@ -86,7 +86,7 @@
         }
 
         api.saveSession(result.token, result.user);
-        window.location.href = '/university/dashboard.html';
+        window.InternGuideApp.navigate('university/dashboard.html');
       } catch (error) {
         api.clearSession();
         api.setMessage('university-login-message', error.message || 'Unable to log in.', 'error');

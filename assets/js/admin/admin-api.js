@@ -63,8 +63,10 @@
   }
 
   function redirectToLogin() {
-    if (window.location.pathname !== '/admin/login.html') {
-      window.location.href = '/admin/login.html';
+    var loginPath = window.InternGuideApp.path('admin/login.html');
+
+    if (window.location.pathname !== loginPath) {
+      window.InternGuideApp.navigate('admin/login.html');
     }
   }
 
@@ -266,7 +268,7 @@
     logout.addEventListener('click', function (event) {
       event.preventDefault();
       clearSession();
-      window.location.href = '/admin/login.html';
+      window.InternGuideApp.navigate('admin/login.html');
     });
   }
 
